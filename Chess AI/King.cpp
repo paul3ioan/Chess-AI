@@ -1,31 +1,27 @@
 #include "King.h"
-
+#include <iostream>
 std::vector<std::pair< Position, Position> >King::getLegalMoves(const Board& board)
 {
+	//king merge in orice camp liber sau neocupat de o piesa de aceasi culoare
 	std::vector<std::pair<Position, Position>> possibleMoves;
 	int dx[] = { -1,-1,-1, 0 ,0, 1, 1, 1 };
 	int dy[] = { -1, 0 , 1, -1, 1, 0 ,-1, 1 };
+
 	for (int i = 0;i < 8; i++)
 	{
 
-		int line = poz.poz.first + dx[i];
-		int col = poz.poz.second + dy[i];
+		int line = poz.poz.first + dx[i]- 48;
+		int col = poz.poz.second + dy[i]- 48;
+		
 		if (line < 0 or col < 0 or line >7 or col > 7)
 			continue;
-		if (board.board[line][col] == PieceCode::empty)
+		
+		if (this->checkSameColor(board, line, col, this->color))
 		{
-			possibleMoves.push_back({ Position(poz), Position(std::make_pair(line, col)) });
-		}
-		if (color == Color::white)
-		{
-			if (board.board[line][col] == PieceCode::whiteBishop or
-				board.board[line][col] == PieceCode::whiteKnight or
-				board.board[line][col] == PieceCode::whitePawn or
-				board.board[line][col] == PieceCode::whiteQueen or
-				board.board[line][col] == PieceCode::whiteRook)
-				continue;
+			possibleMoves.push_back({ Position(poz), Position(std::make_pair(line + 48,col +48)) });
 		}
 	}
+
 	return possibleMoves;
 
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
-#include "Piece.h"
+#include "Position.h"
+//#include "Piece.h"
 enum class PieceCode : uint8_t
 {
 	whiteKing,
@@ -36,8 +37,8 @@ public:
 			{
 				this->board[i][j] = board.board[i][j];
 			}
-		std::cout << "MERGEMERGE";
-		exit(0);
+//		std::cout << "MERGEMERGE";
+	//	exit(0);
 	}
 	PieceCode board[8][8];
 	void makeMove(std::pair<Position, Position> move);
