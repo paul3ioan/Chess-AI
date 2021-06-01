@@ -14,6 +14,7 @@ std::vector<std::pair< Position, Position> >Queen::getLegalMoves(const Board& bo
 			if (line < 0 or col < 0 or line > 7 or col > 7)
 				break;
 			if (board.board[line][col] == PieceCode::empty or checkSameColor(board, line, col, this->color))
+					
 				possibleMoves.push_back({ Position(poz), Position({line + '0',col + '0'}) });
 			else
 				break;

@@ -4,7 +4,7 @@ std::vector<std::pair< Position, Position> >Pawn::getLegalMoves(const Board& boa
 {
 	std::vector<std::pair<Position, Position>> possibleMoves;
 	std::pair<uint8_t, uint8_t> poz = this->poz.poz;
-	std::cout << int(poz.first) << " " << int(poz.second) << '\n';
+	//std::cout << int(poz.first) << " " << int(poz.second) << '\n';
 	std::pair<uint8_t, uint8_t> ans = { poz.first - 48, poz.second - 48 };
 		
 	//check for white color
