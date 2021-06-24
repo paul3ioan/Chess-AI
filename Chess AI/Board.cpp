@@ -27,8 +27,8 @@ void Board::makeAttackBoard( Board& board)
 	for (int i = 0;i < 8;i++)
 		for (int j = 0; j < 8;j++)
 			attackedWhite[i][j] = 0;
-
-	//std::cout << board.pieceList.size() << '\n';
+	//reset attacked board for black
+	
 	for (auto piece : pieceList)
 	{
 		auto moves = piece->getLegalMoves(board);
