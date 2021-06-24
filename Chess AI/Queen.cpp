@@ -1,4 +1,12 @@
 #include "Queen.h"
+
+PieceCode Queen::getPieceCode(Color color)
+{
+	if (color == Color::white)
+		return PieceCode::whiteQueen;
+	return PieceCode::blackQueen;
+}
+
 std::vector<std::pair< Position, Position> >Queen::getLegalMoves(const Board& board)
 {
 	//std::cout << "QUEEN\n";
@@ -14,7 +22,7 @@ std::vector<std::pair< Position, Position> >Queen::getLegalMoves(const Board& bo
 			int col = poz.poz.second + dy[j] * i - 48;
 			if (line < 0 or col < 0 or line > 7 or col > 7)
 				break;
-			if (checkSameColor(board, line, col, this->color))
+			if (checkDifferentColor(board, line, col, this->color))
 			{
 				possibleMoves.push_back({ Position(poz), Position({line + '0',col + '0'}) });
 				if (board.board[line][col] != PieceCode::empty)

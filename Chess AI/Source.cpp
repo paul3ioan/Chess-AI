@@ -45,11 +45,11 @@ int main()
 	//board.pieceList.push_back(pawn5);
 	//board.pieceList.push_back(pawn6);
 	//board.pieceList.push_back(pawn7);
-	GeneralServices::loadPosition(board);
-	
+	GeneralServices generalServices;
+	generalServices.loadPosition(&board);
 	//cout << board.pieceList.size() << '\n';
 	//generalServices.savePosition(&board);
-	//board.makeAttackWhite(board);
+	board.makeAttackBoard(board);
 	cout << "\n\n";
 	for (int i = 0;i <= 7;i++, cout << '\n')
 		for (int j = 0; j<= 7;j++)
