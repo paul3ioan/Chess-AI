@@ -2,6 +2,7 @@
 #include <iostream>
 std::vector<std::pair< Position, Position> >Pawn::getLegalMoves(const Board& board)
 {
+	//std::cout << "PAWN\n";
 	std::vector<std::pair<Position, Position>> possibleMoves;
 	std::pair<uint8_t, uint8_t> poz = this->poz.poz;
 	//std::cout << int(poz.first) << " " << int(poz.second) << '\n';

@@ -1,12 +1,12 @@
 #pragma once
 #include <vector>
 #include "Position.h"
-#include "King.h"
-#include "Pawn.h"
-#include "Bishop.h"
-#include "Rook.h"
-#include "Queen.h"
-#include "Knight.h"
+//#include "King.h"
+//#include "Pawn.h"
+//#include "Bishop.h"
+//#include "Rook.h"
+//#include "Queen.h"
+//#include "Knight.h"
 
 //#include "Piece.h"
 enum class PieceCode : uint8_t
@@ -33,7 +33,7 @@ public:
 	bool whiteCastleLeft = true, whiteCastleRight = true;
 	bool blackCastleLeft = true, blackCastleRight = true;
 	std::string moveList;
-	bool attackedWhite[8][8], attackedBlack[8][8];
+	short int attackedWhite[8][8], attackedBlack[8][8];
 	std::vector<Piece*> pieceList;
 	Board()
 	{
@@ -54,6 +54,6 @@ public:
 	}
 	PieceCode board[8][8];
 	void makeMove(std::pair<Position, Position> move);
-	void makeAttackWhite(const Board*);
-	void makeAttackBlack(const Board*);
+	void makeAttackWhite( Board&);
+	void makeAttackBlack( Board&);
 };

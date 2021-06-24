@@ -1,5 +1,5 @@
 #include "Board.h"
-
+#include "Piece.h"
 void Board::makeMove(std::pair<Position, Position> move)
 {
 	// make move on board
@@ -17,21 +17,28 @@ void Board::makeMove(std::pair<Position, Position> move)
 	moveCode += to.first;
 	moveList += moveCode;
 }
-void Board::makeAttackBlack(const Board* board)
+void Board::makeAttackBlack( Board& board)
 {
+	
 	for (int i = 0;i < 8;i++)
 		for (int j = 0; j < 8;j++)
-			attackedWhite[i][j] = false;
+			attackedWhite[i][j] = 0;
 	//reset attacked board for white
+	
+	std::cout << board.pieceList.size() << '\n';
 	for (auto piece : pieceList)
 	{
-		if (piece->color == Color::white)
-			continue;
-		auto moves = piece->getLegalMoves(*board);
+		
+		//if (piece->color == Color::white)
+			//continue;
+		auto moves = piece->getLegalMoves(board);
+		//std::cout <<'\n' moves.size() << '\n';
 		for (auto move : moves)
 		{
-			if(piece)
-			attackedWhite[move.first.poz.first][move.first.poz.second] = true;
+			//std::cout << contor++<<" ";
+			
+			attackedWhite[move.second.poz.first-'0'][move.second.poz.second-'0'] = 1;
+			
 		}
 	}
 }

@@ -4,7 +4,7 @@
 #include "Pawn.h"
 std::string createPiece(Piece*, const Board*);
 void loadPiece(Board&);
- void GeneralServices::loadPosition(Board& board)
+ void GeneralServices::loadPosition(Board* board)
 {
 	std ::ifstream cin("position.txt");
 	std::string position, moveList;
@@ -25,14 +25,14 @@ void loadPiece(Board&);
 			if (color == 'w')
 			{
 				Piece* pawn = new Pawn(Color::white, Position({ pozx,pozy }));
-				board.board[pozx - '0'][pozy - '0'] = PieceCode::whitePawn;
-				board.pieceList.push_back(pawn);
+				board->board[pozx - '0'][pozy - '0'] = PieceCode::whitePawn;
+				board->pieceList.push_back(pawn);
 			}
 			else
 			{
 				Piece* pawn = new Pawn(Color::black, Position({ pozx,pozy }));
-				board.board[pozx - '0'][pozy - '0'] = PieceCode::blackPawn;
-				board.pieceList.push_back(pawn);
+				board->board[pozx - '0'][pozy - '0'] = PieceCode::blackPawn;
+				board->pieceList.push_back(pawn);
 			}
 
 
@@ -42,14 +42,14 @@ void loadPiece(Board&);
 			if (color == 'w')
 			{
 				Piece* rook = new Rook(Color::white, Position({ pozx,pozy }));
-				board.board[pozx - '0'][pozy - '0'] = PieceCode::whiteRook;
-				board.pieceList.push_back(rook);
+				board->board[pozx - '0'][pozy - '0'] = PieceCode::whiteRook;
+				board->pieceList.push_back(rook);
 			}
 			else
 			{
 				Piece* pawn = new Rook(Color::black, Position({ pozx,pozy }));
-				board.board[pozx - '0'][pozy - '0'] = PieceCode::blackRook;
-				board.pieceList.push_back(pawn);
+				board->board[pozx - '0'][pozy - '0'] = PieceCode::blackRook;
+				board->pieceList.push_back(pawn);
 			}
 
 
@@ -59,14 +59,14 @@ void loadPiece(Board&);
 			if (color == 'w')
 			{
 				Piece* knight = new Knight(Color::white, Position({ pozx,pozy }));
-				board.board[pozx - '0'][pozy - '0'] = PieceCode::whiteKnight;
-				board.pieceList.push_back(knight);
+				board->board[pozx - '0'][pozy - '0'] = PieceCode::whiteKnight;
+				board->pieceList.push_back(knight);
 			}
 			else
 			{
 				Piece* knight = new Knight(Color::black, Position({ pozx,pozy }));
-				board.board[pozx - '0'][pozy - '0'] = PieceCode::blackKnight;
-				board.pieceList.push_back(knight);
+				board->board[pozx - '0'][pozy - '0'] = PieceCode::blackKnight;
+				board->pieceList.push_back(knight);
 			}
 
 
@@ -76,14 +76,14 @@ void loadPiece(Board&);
 			if (color == 'w')
 			{
 				Piece* bishop = new Bishop(Color::white, Position({ pozx,pozy }));
-				board.board[pozx - '0'][pozy - '0'] = PieceCode::whiteBishop;
-				board.pieceList.push_back(bishop);
+				board->board[pozx - '0'][pozy - '0'] = PieceCode::whiteBishop;
+				board->pieceList.push_back(bishop);
 			}
 			else
 			{
 				Piece* bishop = new Bishop(Color::black, Position({ pozx,pozy }));
-				board.board[pozx - '0'][pozy - '0'] = PieceCode::blackBishop;
-				board.pieceList.push_back(bishop);
+				board->board[pozx - '0'][pozy - '0'] = PieceCode::blackBishop;
+				board->pieceList.push_back(bishop);
 			}
 
 
@@ -93,14 +93,14 @@ void loadPiece(Board&);
 			if (color == 'w')
 			{
 				Piece* queen = new Queen(Color::white, Position({ pozx,pozy }));
-				board.board[pozx - '0'][pozy - '0'] = PieceCode::whiteBishop;
-				board.pieceList.push_back(queen);
+				board->board[pozx - '0'][pozy - '0'] = PieceCode::whiteBishop;
+				board->pieceList.push_back(queen);
 			}
 			else
 			{
 				Piece* queen = new Queen(Color::black, Position({ pozx,pozy }));
-				board.board[pozx - '0'][pozy - '0'] = PieceCode::blackQueen;
-				board.pieceList.push_back(queen);
+				board->board[pozx - '0'][pozy - '0'] = PieceCode::blackQueen;
+				board->pieceList.push_back(queen);
 			}
 
 
@@ -110,14 +110,14 @@ void loadPiece(Board&);
 			if (color == 'w')
 			{
 				Piece* king = new King(Color::white, Position({ pozx,pozy }));
-				board.board[pozx - '0'][pozy - '0'] = PieceCode::whiteKing;
-				board.pieceList.push_back(king);
+				board->board[pozx - '0'][pozy - '0'] = PieceCode::whiteKing;
+				board->pieceList.push_back(king);
 			}
 			else
 			{
 				Piece* king = new King(Color::black, Position({ pozx,pozy }));
-				board.board[pozx - '0'][pozy - '0'] = PieceCode::blackKing;
-				board.pieceList.push_back(king);
+				board->board[pozx - '0'][pozy - '0'] = PieceCode::blackKing;
+				board->pieceList.push_back(king);
 			}
 
 
@@ -127,24 +127,24 @@ void loadPiece(Board&);
 	if (i != position.size())
 	{
 		if (position[i] == '1')
-			board.whiteCastleLeft = true;
+			board->whiteCastleLeft = true;
 		else
-			board.whiteCastleLeft = false;
+			board->whiteCastleLeft = false;
 
 		if (position[i + 1] == '1')
-			board.whiteCastleLeft = true;
+			board->whiteCastleLeft = true;
 		else
-			board.whiteCastleLeft = false;
+			board->whiteCastleLeft = false;
 
 		if (position[i + 2] == '1')
-			board.whiteCastleLeft = true;
+			board->whiteCastleLeft = true;
 		else
-			board.whiteCastleLeft = false;
+			board->whiteCastleLeft = false;
 
 		if (position[i + 3] == '1')
-			board.whiteCastleLeft = true;
+			board->whiteCastleLeft = true;
 		else
-			board.whiteCastleLeft = false;
+			board->whiteCastleLeft = false;
 	}
 	//parcurgere de string	
 	//board->pieceList.push_back(//create piece)
@@ -158,7 +158,7 @@ void GeneralServices::savePosition(const Board* board)
 	//cin >> position;
 	cout.open("position.txt", std::ios::out | std::ios::trunc);
 	std::ofstream fout("position.txt");
-	std::cout << "LALALALA\n";
+	//	std::cout << "LALALALA\n";
 	fout << createPosition(board)<< '\n';
 	//cout <<moveList;
 	cout.close();

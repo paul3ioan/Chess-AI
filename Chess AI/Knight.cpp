@@ -2,6 +2,7 @@
 
 std::vector<std::pair< Position, Position> >Knight::getLegalMoves(const Board& board)
 {
+	//std::cout << "Knight\n";
 	std::vector<std::pair<Position, Position>> possibleMoves;
 	int dx[] = { -2, -2, -1, -1, 1, 1, 2, 2 };
 	int dy[] = { -1, 1, -2, 2, -2, 2, -1, 1 };
@@ -11,7 +12,7 @@ std::vector<std::pair< Position, Position> >Knight::getLegalMoves(const Board& b
 		int col = poz.poz.second + dy[i] -'0';
 		if (line < 0 or col < 0 or col > 7 or line > 7)
 			continue;
-		if(checkSameColor(board, line,col, Color::white))
+		if(board.board[line][col] == PieceCode::empty or checkSameColor(board, line,col, Color::white))
 			possibleMoves.push_back({ Position(poz), Position({line + '0',col + '0'}) });
 	}
 

@@ -1,11 +1,12 @@
 #include <iostream>
+#include<vector>
 #include "Piece.h"
-#include "King.h"
-#include "Pawn.h"
-#include "Bishop.h"
-#include "Rook.h"
-#include "Queen.h"
-#include "Knight.h"
+//#include "King.h"
+//#include "Pawn.h"
+//#include "Bishop.h"
+//#include "Rook.h"
+//#include "Queen.h"
+//#include "Knight.h"
 #include "Board.h"
 #include "GeneralServices.h"
 using namespace std;
@@ -16,11 +17,11 @@ int main()
 	board.whiteCastleRight;
 	board.blackCastleLeft;
 	board.blackCastleRight;
-	//Piece* pawn = new Rook(Color::white, Position({ '7', '0' }));
+	//Piece* pawn = new Queen(Color::white, Position({ '7', '0' }));
 	
 	//board.board[7][0] = PieceCode::whiteRook;
-	//Piece* pawn1= new Knight(Color::white, Position({ '7', '1' }));
-	//board.board[7][1] = PieceCode::whiteKnight;
+	//Piece* pawn1= new Knight(Color::black, Position({ '7', '4' }));
+	//board.board[7][4] = PieceCode::blackKnight;
 				
 	//Piece* pawn2 = new Bishop(Color::white, Position({ '7', '2' }));
 	//board.board[7][2] = PieceCode::whiteBishop;
@@ -49,8 +50,12 @@ int main()
 	//board.pieceList.push_back(pawn6);
 	//board.pieceList.push_back(pawn7);
 	GeneralServices generalServices;
-	
-	generalServices.loadPosition(board);
-	generalServices.savePosition(&board);
-	
+	generalServices.loadPosition(&board);
+	//cout << board.pieceList.size() << '\n';
+	//generalServices.savePosition(&board);
+	board.makeAttackBlack(board);
+	cout << "\n\n";
+	for (int i = 0;i <= 7;i++, cout << '\n')
+		for (int j = 0; j<= 7;j++)
+			cout << board.attackedWhite[i][j] << " ";
 }

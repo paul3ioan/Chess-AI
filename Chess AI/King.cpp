@@ -2,6 +2,7 @@
 #include <iostream>
 std::vector<std::pair< Position, Position> >King::getLegalMoves(const Board& board)
 {
+//	std::cout << "King\n";
 	//king merge in orice camp liber sau neocupat de o piesa de aceasi culoare
 	std::vector<std::pair<Position, Position>> possibleMoves;
 	int dx[] = { -1,-1,-1, 0 ,0, 1, 1, 1 };
