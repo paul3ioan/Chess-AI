@@ -11,8 +11,8 @@ class Piece;
 class GeneralServices
 {
 public:
-	 static void loadPosition(Board& board);
-	 static void savePosition(const Board* board);
-	 static std::string createPosition(const Board* board);
+	 void loadPosition(Board* board);
+	 void savePosition(const Board* board);
+	 std::string createPosition(const Board* board);
 };
 
