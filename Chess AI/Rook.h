@@ -4,7 +4,7 @@ class Rook :public Piece
 {	
 public:
 	Rook(Color color, Position poz) : Piece(color, poz) {}
-	std::vector<std::pair< Position, Position> >getLegalMoves(const Board& board);
-
+	std::vector<Move >getLegalMoves(const Board& board);
+	PieceCode getPieceCode(Color color) override;
 };
 

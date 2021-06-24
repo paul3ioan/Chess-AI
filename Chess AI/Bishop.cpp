@@ -1,9 +1,16 @@
 #include "Bishop.h"
 
-std::vector<std::pair< Position, Position> >Bishop::getLegalMoves(const Board& board)
+PieceCode Bishop::getPieceCode(Color color)
+{
+	if (color == Color::white)
+		return PieceCode::whiteBishop;
+	return PieceCode::blackBishop;
+}
+
+std::vector<Move>Bishop::getLegalMoves(const Board& board)
 {
 	//std::cout << "BISHOP\n";
-	std::vector<std::pair<Position, Position>> possibleMoves;
+	std::vector<Move> possibleMoves;
 	int dx[] = { -1, -1, 1, 1 };
 	int dy[] = { -1, 1, -1, 1 };
 		for (int j = 0;j < 4;j++)
@@ -15,10 +22,10 @@ std::vector<std::pair< Position, Position> >Bishop::getLegalMoves(const Board& b
 				int col = poz.poz.second + dy[j] * i - 48;
 				if (line < 0 or col < 0 or line > 7 or col > 7)
 					break;
-				if (checkSameColor(board, line, col, this->color))
+				if (checkDifferentColor(board, line, col, this->color))
 				{
-					possibleMoves.push_back({ Position(poz), Position({line + '0',col + '0'}) });
-					if (board.board[line][col] != PieceCode::empty)
+					possibleMoves.emplace_back(Position(poz), Position({line + '0',col + '0'}),MoveType::basic, this);
+					if (board.board[line][col].first != PieceCode::empty)
 						break;
 				}
 				else

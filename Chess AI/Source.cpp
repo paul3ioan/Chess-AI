@@ -45,13 +45,30 @@ int main()
 	//board.pieceList.push_back(pawn5);
 	//board.pieceList.push_back(pawn6);
 	//board.pieceList.push_back(pawn7);
-	GeneralServices generalServices;
-	generalServices.loadPosition(&board);
+	GeneralServices::loadPosition(board);
 	//cout << board.pieceList.size() << '\n';
 	//generalServices.savePosition(&board);
-	//board.makeAttackWhite(board);
-	cout << "\n\n";
+	board.makeAttackBoard();
+	//board.pieceList[0].
+	//cout << "\n\n";
 	for (int i = 0;i <= 7;i++, cout << '\n')
 		for (int j = 0; j<= 7;j++)
-			cout << board.attackedBlack[i][j] << " ";
+			cout << board.attackedWhite[i][j] << " ";
+	for (Piece* piece : board.pieceList)
+	{
+		if (piece->getPieceCode(Color::white) == PieceCode::whiteKing)
+		{
+			vector<Move> moves = piece->getLegalMoves(board);
+			for (Move move : moves)
+			{
+				if (move.moveType == MoveType::castle)
+				{
+					cout << move.to.poz.first << " " << move.to.poz.second << " " << "castle\n";
+				
+				}
+				else
+					cout << move.to.poz.first << " " << move.to.poz.second << " " << "basic\n";
+			}
+		}
+	}
 }

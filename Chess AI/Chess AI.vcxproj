@@ -147,6 +147,7 @@
     <ClCompile Include="GeneralServices.cpp" />
     <ClCompile Include="King.cpp" />
     <ClCompile Include="Knight.cpp" />
+    <ClCompile Include="Move.cpp" />
     <ClCompile Include="MoveHistory.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Queen.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="GeneralServices.h" />
     <ClInclude Include="King.h" />
     <ClInclude Include="Knight.h" />
+    <ClInclude Include="Move.h" />
     <ClInclude Include="MoveHistory.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Position.h" />
