@@ -8,6 +8,7 @@ void Board::makeMove(std::pair<Position, Position> move)
 	board[to.first][to.second] = board[from.first][from.second];
 	board[from.first][from.second] = PieceCode::empty;
 	// make move in moveList
+	// TODO: de mutat intr-o functie care converteste o mutare la string + poate facut clasa separata Move
 	std::string moveCode;
 	from.first = from.first + 'a' - '0';
 	to.first = from.first + 'a' - '0';
@@ -17,7 +18,7 @@ void Board::makeMove(std::pair<Position, Position> move)
 	moveCode += to.first;
 	moveList += moveCode;
 }
-void Board::makeAttackBoard( Board& board)
+void Board::makeAttackBoard()
 {
 	
 	for (int i = 0;i < 8;i++)
@@ -31,7 +32,7 @@ void Board::makeAttackBoard( Board& board)
 	//std::cout << board.pieceList.size() << '\n';
 	for (auto piece : pieceList)
 	{
-		auto moves = piece->getLegalMoves(board);
+		auto moves = piece->getLegalMoves(*this);
 		
 		for (auto move : moves)
 		{

@@ -1,5 +1,5 @@
 #include "Piece.h"
-bool Piece::checkSameColor(const Board& board, int line, int col, Color color)
+bool Piece::checkDifferentColor(const Board& board, int line, int col, Color color)
 {
 	if (board.board[line][col] == PieceCode::empty)
 		return true;

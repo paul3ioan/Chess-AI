@@ -1,4 +1,12 @@
 #include "Rook.h"
+
+PieceCode Rook::getPieceCode(Color color)
+{
+	if (color == Color::white)
+		return PieceCode::whiteRook;
+	return PieceCode::blackRook;
+}
+
 std::vector<std::pair< Position, Position> >Rook::getLegalMoves(const Board& board)
 {
 	//std::cout << "ROOK\n";
@@ -17,13 +25,13 @@ std::vector<std::pair< Position, Position> >Rook::getLegalMoves(const Board& boa
 			//if (board.board[line][col] == PieceCode::empty)
 				//possibleMoves.push_back({ Position(poz), Position({line + '0',col + '0'}) });
 		//	else
-				if (checkSameColor(board, line, col, this->color))
-				{
-					possibleMoves.push_back({ Position(poz), Position({line + '0',col + '0'}) });
-					if (board.board[line][col] != PieceCode::empty)
-						break;
-				}
-				else
+			if (checkDifferentColor(board, line, col, this->color))
+			{
+				possibleMoves.push_back({ Position(poz), Position({line + '0',col + '0'}) });
+				if (board.board[line][col] != PieceCode::empty)
+					break;
+			}
+			else
 				break;
 			i++;
 		}

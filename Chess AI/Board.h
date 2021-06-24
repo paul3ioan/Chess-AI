@@ -54,6 +54,5 @@ public:
 	}
 	PieceCode board[8][8];
 	void makeMove(std::pair<Position, Position> move);
-	void makeAttackBoard( Board&);
-	void makeAttackBlack( Board&);
+	void makeAttackBoard();
 };

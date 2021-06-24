@@ -1,5 +1,13 @@
 #include "Pawn.h"
 #include <iostream>
+
+PieceCode Pawn::getPieceCode(Color color)
+{
+	if (color == Color::white)
+		return PieceCode::whitePawn;
+	return PieceCode::blackPawn;
+}
+
 std::vector<std::pair< Position, Position> >Pawn::getLegalMoves(const Board& board)
 {
 	//std::cout << "PAWN\n";
@@ -22,13 +30,13 @@ std::vector<std::pair< Position, Position> >Pawn::getLegalMoves(const Board& boa
 			possibleMoves.push_back({ Position(poz), Position(std::make_pair(poz.first + 2, poz.second)) });
 		//check capture right
 		
-		if (ans.second + 1 < 8 and checkSameColor(board, ans.first + 1, ans.second + 1, Color::black) and
+		if (ans.second + 1 < 8 and checkDifferentColor(board, ans.first + 1, ans.second + 1, Color::black) and
 			board.board[ans.first + 1][ans.second + 1] != PieceCode::empty)
 		{
 			possibleMoves.push_back({ Position(poz), Position(std::make_pair(poz.first + 1, poz.second + 1)) });
 		}
 		//check capture left
-		if (ans.second -1 >0 and checkSameColor(board, ans.first + 1, ans.second - 1, Color::black) and
+		if (ans.second -1 >0 and checkDifferentColor(board, ans.first + 1, ans.second - 1, Color::black) and
 			board.board[ans.first + 1][ans.second - 1] != PieceCode::empty)
 		{
 			possibleMoves.push_back({ Position(poz), Position(std::make_pair(poz.first - 1, poz.second - 1)) });
@@ -50,13 +58,13 @@ std::vector<std::pair< Position, Position> >Pawn::getLegalMoves(const Board& boa
 			and board.board[ans.first - 2][ans.second] == PieceCode::empty)
 			possibleMoves.push_back({ Position(poz), Position(std::make_pair(poz.first - 2, poz.second)) });
 		//check capture right
-		if (ans.second + 1 < 8 and checkSameColor(board, ans.first - 1, ans.second + 1, Color::white) and
+		if (ans.second + 1 < 8 and checkDifferentColor(board, ans.first - 1, ans.second + 1, Color::white) and
 			board.board[ans.first - 1][ans.second + 1] != PieceCode::empty)
 		{
 			possibleMoves.push_back({ Position(poz), Position(std::make_pair(poz.first - 1, poz.second + 1)) });
 		}
 		//check capture left
-		if (ans.second - 1 > 0 and checkSameColor(board, ans.first - 1, ans.second - 1, Color::white) and
+		if (ans.second - 1 > 0 and checkDifferentColor(board, ans.first - 1, ans.second - 1, Color::white) and
 			board.board[ans.first - 1][ans.second - 1] != PieceCode::empty)
 		{
 			possibleMoves.push_back({ Position(poz), Position(std::make_pair(poz.first - 1, poz.second - 1)) });
