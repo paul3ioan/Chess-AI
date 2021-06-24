@@ -22,7 +22,26 @@ std::vector<std::pair< Position, Position> >King::getLegalMoves(const Board& boa
 			possibleMoves.push_back({ Position(poz), Position(std::make_pair(line + 48,col +48)) });
 		}
 	}
-
+	if (this->color == Color::white and board.whiteCastleLeft == true)
+	{
+		if (board.attackedWhite[7][4] or board.attackedWhite[7][3] or board.attackedWhite[7][2])
+			possibleMoves.push_back({ Position(poz), Position(std::make_pair(7 + '0', 2 + '0')) });
+	}
+	if (this->color == Color::white and board.whiteCastleRight == true)
+	{
+		if (board.attackedWhite[7][4] or board.attackedWhite[7][5] or board.attackedWhite[7][6])
+			possibleMoves.push_back({ Position(poz), Position(std::make_pair(7 + '0', 6 + '0')) });
+	}
+	if (this->color == Color::black and board.blackCastleLeft == true)
+	{
+		if (board.attackedBlack[0][4] or board.attackedBlack[0][3] or board.attackedBlack[0][2])
+			possibleMoves.push_back({ Position(poz), Position(std::make_pair(0 + '0', 2 + '0')) });
+	}
+	if (this->color == Color::black and board.blackCastleRight == true)
+	{
+		if (board.attackedBlack[0][4] or board.attackedBlack[0][5] or board.attackedBlack[0][6])
+			possibleMoves.push_back({ Position(poz), Position(std::make_pair(0 + '0', 6 + '0')) });
+	}
 	return possibleMoves;
 
 }

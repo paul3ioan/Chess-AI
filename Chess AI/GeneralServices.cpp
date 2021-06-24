@@ -132,19 +132,19 @@ void loadPiece(Board&);
 			board->whiteCastleLeft = false;
 
 		if (position[i + 1] == '1')
-			board->whiteCastleLeft = true;
+			board->whiteCastleRight = true;
 		else
-			board->whiteCastleLeft = false;
+			board->whiteCastleRight = false;
 
 		if (position[i + 2] == '1')
-			board->whiteCastleLeft = true;
+			board->blackCastleLeft = true;
 		else
-			board->whiteCastleLeft = false;
+			board->blackCastleLeft = false;
 
 		if (position[i + 3] == '1')
-			board->whiteCastleLeft = true;
+			board->blackCastleRight = true;
 		else
-			board->whiteCastleLeft = false;
+			board->blackCastleRight = false;
 	}
 	//parcurgere de string	
 	//board->pieceList.push_back(//create piece)

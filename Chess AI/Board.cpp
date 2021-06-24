@@ -17,27 +17,28 @@ void Board::makeMove(std::pair<Position, Position> move)
 	moveCode += to.first;
 	moveList += moveCode;
 }
-void Board::makeAttackBlack( Board& board)
+void Board::makeAttackBoard( Board& board)
 {
 	
 	for (int i = 0;i < 8;i++)
 		for (int j = 0; j < 8;j++)
-			attackedWhite[i][j] = 0;
+			attackedBlack[i][j] = 0;
 	//reset attacked board for white
-	
-	std::cout << board.pieceList.size() << '\n';
+	for (int i = 0;i < 8;i++)
+		for (int j = 0; j < 8;j++)
+			attackedWhite[i][j] = 0;
+
+	//std::cout << board.pieceList.size() << '\n';
 	for (auto piece : pieceList)
 	{
-		
-		//if (piece->color == Color::white)
-			//continue;
 		auto moves = piece->getLegalMoves(board);
-		//std::cout <<'\n' moves.size() << '\n';
+		
 		for (auto move : moves)
 		{
-			//std::cout << contor++<<" ";
-			
-			attackedWhite[move.second.poz.first-'0'][move.second.poz.second-'0'] = 1;
+			if (piece->color == Color::black)
+				attackedWhite[move.second.poz.first - '0'][move.second.poz.second - '0'] = 1;
+			else
+				attackedBlack[move.second.poz.first-'0'][move.second.poz.second-'0'] = 1;
 			
 		}
 	}

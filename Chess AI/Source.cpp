@@ -13,10 +13,6 @@ using namespace std;
 int main()
 {
 	Board board;
-	board.whiteCastleLeft;
-	board.whiteCastleRight;
-	board.blackCastleLeft;
-	board.blackCastleRight;
 	//Piece* pawn = new Queen(Color::white, Position({ '7', '0' }));
 	
 	//board.board[7][0] = PieceCode::whiteRook;
@@ -53,9 +49,9 @@ int main()
 	generalServices.loadPosition(&board);
 	//cout << board.pieceList.size() << '\n';
 	//generalServices.savePosition(&board);
-	board.makeAttackBlack(board);
+	//board.makeAttackWhite(board);
 	cout << "\n\n";
 	for (int i = 0;i <= 7;i++, cout << '\n')
 		for (int j = 0; j<= 7;j++)
-			cout << board.attackedWhite[i][j] << " ";
+			cout << board.attackedBlack[i][j] << " ";
 }
