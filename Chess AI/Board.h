@@ -27,6 +27,7 @@ enum class PieceCode : uint8_t
 
 	empty
 };
+enum class Color:uint8_t;
 class Piece;
 class Move;
 class Board {
@@ -37,25 +38,16 @@ public:
 	std::string moveNotationList;
 	short int attackedWhite[8][8], attackedBlack[8][8];
 	std::vector<Piece*> pieceList;
-	Board()
-	{
-		for(int i =0 ;i <=7; i ++)
-			for (int j = 0; j <= 7;j++)
-			{
-				this->board[i][j].first = PieceCode::empty;
-				this->board[i][j].second = nullptr;
-			}
-	}
-	Board(const Board& board) {
-		for (int i = 0;i <= 7; i++)
-			for (int j = 0; j <= 7;j++)
-			{
-				this->board[i][j] = board.board[i][j];
-			}
-//		std::cout << "MERGEMERGE";
-	//	exit(0);
-	}
+
+	Board();
+	Board(const Board& board);
+	~Board();
 	std::pair<PieceCode, Piece*> board[8][8];
-	void makeMove(Move move);
+	bool makeMove(Move move);
+	void doMove(Move* move);
 	void makeAttackBoard();
+	void basicMove(Move*, Color color);
+	bool isValid(Move* move);
+	bool testMove(Move move);
+	std::vector<Move>getAllMoves(Color color);
 };

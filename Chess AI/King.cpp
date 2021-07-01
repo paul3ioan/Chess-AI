@@ -81,6 +81,6 @@ std::vector<Move >King::getLegalMoves(const Board& board)
 		}
 
 	}
-	std::cout << possibleMoves.size()<<'\n';
+	//std::cout << possibleMoves.size()<<'\n';
 	return possibleMoves;
 }

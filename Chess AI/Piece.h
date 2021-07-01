@@ -20,5 +20,4 @@ public:
 	virtual PieceCode getPieceCode(Color color) = 0;
 	bool checkDifferentColor(const Board& board, int line, int col, Color color);
 	
-	
 };
