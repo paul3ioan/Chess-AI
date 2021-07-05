@@ -12,9 +12,9 @@ std::vector<Move >Pawn::getLegalMoves(const Board& board)
 {
 	//std::cout << "PAWN\n";
 	std::vector<Move> possibleMoves;
-	std::pair<uint8_t, uint8_t> poz = this->poz.poz;
-	//std::cout << int(poz.first) << " " << int(poz.second) << '\n';
-	std::pair<uint8_t, uint8_t> ans = { poz.first - 48, poz.second - 48 };
+	std::pair<int, int> poz = this->poz.poz;
+	
+	std::pair<int, int> ans = { poz.first, poz.second};
 		
 	//check for white color
 	if (this->color == Color::black)
@@ -26,7 +26,7 @@ std::vector<Move >Pawn::getLegalMoves(const Board& board)
 			else
 				possibleMoves.emplace_back(Position(poz), Position(std::make_pair(poz.first + 1, poz.second)), MoveType::promote,this);
 		// check two square up move
-		if (board.board[ans.first + 1][ans.second].first == PieceCode::empty and poz.first == '1'
+		if (board.board[ans.first + 1][ans.second].first == PieceCode::empty and poz.first == 1
 			and board.board[ans.first + 2][ans.second].first == PieceCode::empty)
 			possibleMoves.emplace_back( Position(poz), Position(std::make_pair(poz.first + 2, poz.second)), MoveType::doubleUp,this);
 		//check capture right
@@ -69,7 +69,7 @@ std::vector<Move >Pawn::getLegalMoves(const Board& board)
 		
 		// check two square up move
 		
-		if (board.board[ans.first - 1][ans.second].first == PieceCode::empty and poz.first == '6'
+		if (board.board[ans.first - 1][ans.second].first == PieceCode::empty and poz.first == 6
 			and board.board[ans.first - 2][ans.second].first == PieceCode::empty)
 			possibleMoves.emplace_back( Position(poz), Position(std::make_pair(poz.first - 2, poz.second)),MoveType::doubleUp,this);
 		//check capture right

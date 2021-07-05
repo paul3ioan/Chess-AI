@@ -2,9 +2,9 @@
 #include <string>
 class Position {
 public:
-	Position(std::pair<uint8_t, uint8_t> poz) : poz(poz) {
+	Position(std::pair<int, int> poz) : poz(poz) {
 
 	}
-	std::pair< uint8_t, uint8_t> poz;
+	std::pair< int, int> poz;
 	std::string chessNote();
 };

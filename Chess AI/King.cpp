@@ -10,26 +10,25 @@ PieceCode King::getPieceCode(Color color)
 
 std::vector<Move >King::getLegalMoves(const Board& board)
 {
-	//	std::cout << "King\n";
-		//king merge in orice camp liber sau neocupat de o piesa de aceasi culoare
 	std::vector<Move> possibleMoves;
 	int dx[] = { -1,-1,-1, 0 ,0, 1, 1, 1 };
 	int dy[] = { -1, 0 , 1, -1, 1, 0 ,-1, 1 };
-
+	// normal move
 	for (int i = 0; i < 8; i++)
 	{
 
-		int line = poz.poz.first + dx[i] - 48;
-		int col = poz.poz.second + dy[i] - 48;
+		int line = poz.poz.first + dx[i] ;
+		int col = poz.poz.second + dy[i] ;
 
 		if (line < 0 or col < 0 or line >7 or col > 7)
 			continue;
 
 		if (this->checkDifferentColor(board, line, col, this->color) and !board.attackedWhite[line][col])
 		{
-			possibleMoves.emplace_back(Position(poz), Position(std::make_pair(line + 48, col + 48)), MoveType::king, this);
+			possibleMoves.emplace_back(Position(poz), Position(std::make_pair(line , col)), MoveType::king, this);
 		}
 	}
+	//castles
 	if (this->color == Color::white and board.whiteCastleLeft == true and board.board[7][0].first == PieceCode::whiteRook)
 	{
 		if (!(board.attackedWhite[7][4] or board.attackedWhite[7][3] or board.attackedWhite[7][2]))
@@ -39,7 +38,7 @@ std::vector<Move >King::getLegalMoves(const Board& board)
 				if (board.board[7][i].first != PieceCode::empty)
 					flag = false;
 			if (flag == true)
-				possibleMoves.emplace_back(Position(poz), Position(std::make_pair(7 + '0', 2 + '0')), MoveType::castle, this);
+				possibleMoves.emplace_back(Position(poz), Position(std::make_pair(7 , 2 )), MoveType::castle, this);
 		}
 	}
 	if (this->color == Color::white and board.whiteCastleRight == true)
@@ -52,7 +51,7 @@ std::vector<Move >King::getLegalMoves(const Board& board)
 				if (board.board[7][i].first != PieceCode::empty)
 					flag = false;
 			if (flag == true)
-				possibleMoves.emplace_back(Position(poz), Position(std::make_pair(7 + '0', 6 + '0')), MoveType::castle, this);
+				possibleMoves.emplace_back(Position(poz), Position(std::make_pair(7 , 6 )), MoveType::castle, this);
 
 		}
 	}
@@ -65,7 +64,7 @@ std::vector<Move >King::getLegalMoves(const Board& board)
 				if (board.board[0][i].first != PieceCode::empty)
 					flag = false;
 			if (flag == true)
-				possibleMoves.emplace_back(Position(poz), Position(std::make_pair(0 + '0', 2 + '0')), MoveType::castle, this);
+				possibleMoves.emplace_back(Position(poz), Position(std::make_pair(0, 2)), MoveType::castle, this);
 		}
 	}
 	if (this->color == Color::black and board.blackCastleRight == true and board.board[0][7].first == PieceCode::blackRook)
@@ -77,10 +76,10 @@ std::vector<Move >King::getLegalMoves(const Board& board)
 				if (board.board[0][i].first != PieceCode::empty)
 					flag = false;
 			if (flag == true)
-				possibleMoves.emplace_back(Position(poz), Position(std::make_pair(0 + '0', 6 + '0')), MoveType::castle, this);
+				possibleMoves.emplace_back(Position(poz), Position(std::make_pair(0 , 6 )), MoveType::castle, this);
 		}
 
 	}
-	//std::cout << possibleMoves.size()<<'\n';
+	
 	return possibleMoves;
 }

@@ -34,11 +34,14 @@ class Board {
 public:
 	bool whiteCastleLeft = true, whiteCastleRight = true;
 	bool blackCastleLeft = true, blackCastleRight = true;
+
+	bool undoWhiteCastleLeft = true, undoWhiteCastleRight = true;
+	bool undoBlackCastleLeft = true, undoBlackCastleRight = true;
 	std::vector<Move> moveList;
 	std::string moveNotationList;
 	short int attackedWhite[8][8], attackedBlack[8][8];
 	std::vector<Piece*> pieceList;
-
+	Piece* capturedPiece;
 	Board();
 	Board(const Board& board);
 	~Board();
@@ -46,8 +49,10 @@ public:
 	bool makeMove(Move move);
 	void doMove(Move* move);
 	void makeAttackBoard();
-	void basicMove(Move*, Color color);
+	void basicMove(Move*);
 	bool isValid(Move* move);
 	bool testMove(Move move);
+	void undoMove(Move* move);
+	void basicUndoMove(Move* move);
 	std::vector<Move>getAllMoves(Color color);
 };

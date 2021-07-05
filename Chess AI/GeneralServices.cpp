@@ -6,18 +6,18 @@
 std::string pieceToString(Piece*, const Board&);
 
 template<class T>
-void createPiece(uint8_t pozx, uint8_t pozy, uint8_t color, Board& board)
+void createPiece(int pozx, int pozy, uint8_t color, Board& board)
 {
 	if (color == 'w')
 	{
 		Piece* piece = new T(Color::white, Position({ pozx,pozy }));
-		board.board[pozx - '0'][pozy - '0'] = { piece->getPieceCode(Color::white), piece };
+		board.board[pozx ][pozy ] = { piece->getPieceCode(Color::white), piece };
 		board.pieceList.push_back(piece);
 	}
 	else
 	{
 		Piece* piece = new T(Color::black, Position({ pozx,pozy }));
-		board.board[pozx - '0'][pozy - '0'] = { piece->getPieceCode(Color::black), piece };
+		board.board[pozx ][pozy ] = { piece->getPieceCode(Color::black), piece };
 		
 		board.pieceList.push_back(piece);
 	}
@@ -37,8 +37,8 @@ void createPiece(uint8_t pozx, uint8_t pozy, uint8_t color, Board& board)
 		
 		uint8_t pieceType = position[i];
 		uint8_t color = position[i + 1];
-		uint8_t pozx = position[i + 2];
-		uint8_t pozy = position[i + 3];
+		int pozx = position[i + 2] -'0';
+		int pozy = position[i + 3] - '0';
 		
 		switch (pieceType)
 		{
@@ -71,6 +71,7 @@ void createPiece(uint8_t pozx, uint8_t pozy, uint8_t color, Board& board)
 	{
 		if (position[i] == '1')
 			board.whiteCastleLeft = true;
+		
 		else
 			board.whiteCastleLeft = false;
 
@@ -88,6 +89,10 @@ void createPiece(uint8_t pozx, uint8_t pozy, uint8_t color, Board& board)
 			board.blackCastleRight = true;
 		else
 			board.blackCastleRight = false;
+		board.undoWhiteCastleLeft = board.whiteCastleLeft ;
+		board.undoWhiteCastleRight = board.whiteCastleRight ;
+		board.undoBlackCastleLeft = board.blackCastleLeft ;
+		board.undoBlackCastleRight = board.blackCastleRight;
 	}
 	//parcurgere de string	
 	//board.pieceList.push_back(//create piece)
@@ -136,9 +141,9 @@ std::string GeneralServices::createPosition(const Board& board)
 std::string pieceToString(Piece* piece, const Board& board)
 {
 	//uint8_t leftCastle, rightCastle;
-	uint8_t pozx = piece->poz.poz.first;
+	int pozx = piece->poz.poz.first + '0';
 	uint8_t color, pieceType='0';
-	uint8_t pozy = piece->poz.poz.second;
+	int pozy = piece->poz.poz.second+ '0';
 	std::string pieceString;
 	if (piece->color == Color::white)
 		color = 'w';
