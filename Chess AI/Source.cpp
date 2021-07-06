@@ -6,7 +6,7 @@
 #include "GeneralServices.h"
 using namespace std;
 int test(Board& board, int);
-const int maxDepth = 2;
+const int maxDepth = 0;
 int main()
 {
 	
@@ -50,7 +50,6 @@ int test(Board& board, int depth)
 		if (depth >= maxDepth)
 		{
 			ans++;
-			board.undoMove(&move);
 			continue;
 		}
 		ans += test(board, depth + 1);

@@ -342,7 +342,12 @@ void Board::basicUndoMove(Move* move)
 	int toy = move->to.poz.second;
 	int fromx = move->from.poz.first;
 	int fromy = move->from.poz.second;
-	this->board[fromx][fromy] = { move->piece->getPieceCode(move->piece->color),move->piece };
+	if (move->piece == nullptr)
+	{
+		std::cout << "LOL NOOB";
+		exit(0);
+	}
+		this->board[fromx][fromy] = { move->piece->getPieceCode(move->piece->color),move->piece };
 	this->board[tox][toy] = { PieceCode::empty, nullptr };
 	if (this->capturedPiece != nullptr)
 		this->board[tox][toy] = { move->piece->getPieceCode(move->piece->color), move->piece };
