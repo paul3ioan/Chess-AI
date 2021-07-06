@@ -168,7 +168,6 @@ void Board::doMove(Move* move)
 		int whichLine =  move->piece->color == Color::white ? 0 : 7;
 		if (fromy == 6)
 		{
-
 			Piece* movedRook = this->board[whichLine][7].second;
 			this->board[whichLine][5] = { movedRook->getPieceCode( move->piece->color),movedRook };
 			this->board[whichLine][7] = { PieceCode::empty, nullptr };
@@ -197,20 +196,20 @@ void Board::doMove(Move* move)
 	}
 	if (move->moveType == MoveType::promote)
 	{
-		this->capturedPiece = move->piece;
-		remove(this->pieceList.begin(), this->pieceList.end(), move->piece);
-		delete move->piece;
-		// for now the new piece is a queen
-			//Piece* newPiece = new Queen()
-			//this->pieceList.push_back(newPiece);
-			//this->board[tox][toy] = {newPiece->getPieceCode( move->piece->color), newPiece};
+		this->capturedPiece = this->board[fromx][fromy].second;
+		auto newEnd = remove(this->pieceList.begin(), this->pieceList.end(), this->capturedPiece);
+		this->pieceList.erase(newEnd, this->pieceList.end());
+		this->board[fromx][fromy] = { PieceCode::empty, nullptr };
+		//for now the new piece is a queen
+		Piece* newPiece = new Queen(this->capturedPiece->color, move->to);
+		this->pieceList.push_back(newPiece);
+		this->board[tox][toy] = {newPiece->getPieceCode( move->piece->color), newPiece};
 	}
 	if (move->moveType == MoveType::enpasant)
 	{
-		Piece* capturedPiece = this->board[fromx][toy].second;
-		this->capturedPiece = capturedPiece;
-		remove(this->pieceList.begin(), this->pieceList.end(), capturedPiece);
-		delete capturedPiece;
+		this->capturedPiece = this->board[fromx][toy].second;
+		auto newEnd = remove(this->pieceList.begin(), this->pieceList.end(), this->capturedPiece);
+		this->pieceList.erase(newEnd, this->pieceList.end());
 		this->board[fromx][toy] = { PieceCode::empty, nullptr };
 		basicMove(move);
 	}
@@ -225,16 +224,14 @@ void Board::basicMove( Move* move)
 	// basic move implementation
 	if (this->board[tox][toy].first == PieceCode::empty)
 	{
-		
 		this->board[tox][toy] = { piece->getPieceCode( move->piece->color),piece };
 		this->board[fromx][fromy] = { PieceCode::empty, nullptr };
 	}
 	else
 	{
-		Piece* capturedPiece = this->board[tox][toy].second;
-		this->capturedPiece = capturedPiece;
-		remove(this->pieceList.begin(), this->pieceList.end(), capturedPiece);
-		delete capturedPiece;
+		this->capturedPiece = this->board[tox][toy].second;
+		auto newEnd = remove(this->pieceList.begin(), this->pieceList.end(), capturedPiece);
+		this->pieceList.erase(newEnd, this->pieceList.end());
 		this->board[tox][toy] = { piece->getPieceCode(move->piece->color),piece };
 		this->board[fromx][fromy] = { PieceCode::empty, nullptr };
 	}
@@ -321,16 +318,18 @@ void Board::undoMove(Move* move)
 	}
 	if (move->moveType == MoveType::enpasant)
 	{
-		this->board[move->from.poz.first][move->to.poz.second] = { this->capturedPiece->getPieceCode(this->capturedPiece->color), this->capturedPiece };
-		capturedPiece = nullptr;
+		//this->board[move->from.poz.first][move->to.poz.second] = { this->capturedPiece->getPieceCode(this->capturedPiece->color), this->capturedPiece };
+		//capturedPiece = nullptr;
 		basicUndoMove(move);
 	}
 	if (move->moveType == MoveType::promote)
 	{
 		Piece* promotedPiece = this->board[move->to.poz.first][move->to.poz.second].second;
-		remove(pieceList.begin(), pieceList.end(), promotedPiece);
+		auto newEnd = remove(pieceList.begin(), pieceList.end(), promotedPiece);
+		this->pieceList.erase(newEnd, this->pieceList.end());
 		delete promotedPiece;
-		Piece* newPiece = new Pawn(move->piece->color, move->piece->poz);
+		Piece* newPiece = this->capturedPiece;
+		this->capturedPiece = nullptr;
 		this->board[move->from.poz.first][move->from.poz.second] = { newPiece->getPieceCode(newPiece->color), newPiece };
 		pieceList.push_back(newPiece);
 	}
@@ -345,7 +344,8 @@ void Board::basicUndoMove(Move* move)
 	this->board[fromx][fromy] = { move->piece->getPieceCode(move->piece->color),move->piece };
 	this->board[tox][toy] = { PieceCode::empty, nullptr };
 	if (this->capturedPiece != nullptr)
-		this->board[tox][toy] = { move->piece->getPieceCode(move->piece->color), move->piece };
-	
-
+	{
+		this->board[tox][toy] = { this->capturedPiece->getPieceCode(this->capturedPiece->color), this->capturedPiece };
+		this->capturedPiece = nullptr;
+	}
 }
