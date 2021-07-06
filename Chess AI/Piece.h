@@ -19,5 +19,8 @@ public:
 	virtual std::vector<Move> getLegalMoves(const Board& board) = 0;
 	virtual PieceCode getPieceCode(Color color) = 0;
 	bool checkDifferentColor(const Board& board, int line, int col, Color color);
-	
+	~Piece()
+	{
+		//std::cout << "Deleted " << this << '\n';
+	}
 };
