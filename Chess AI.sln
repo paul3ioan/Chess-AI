@@ -5,6 +5,11 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Chess AI", "Chess AI\Chess AI.vcxproj", "{7241CE0A-9298-4A0D-895E-89606579B0C1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test Chess", "Test Chess\Test Chess.vcxproj", "{EAB3986C-6B7A-4D3C-8507-C00F8D038876}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7241CE0A-9298-4A0D-895E-89606579B0C1} = {7241CE0A-9298-4A0D-895E-89606579B0C1}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +26,14 @@ Global
 		{7241CE0A-9298-4A0D-895E-89606579B0C1}.Release|x64.Build.0 = Release|x64
 		{7241CE0A-9298-4A0D-895E-89606579B0C1}.Release|x86.ActiveCfg = Release|Win32
 		{7241CE0A-9298-4A0D-895E-89606579B0C1}.Release|x86.Build.0 = Release|Win32
+		{EAB3986C-6B7A-4D3C-8507-C00F8D038876}.Debug|x64.ActiveCfg = Debug|x64
+		{EAB3986C-6B7A-4D3C-8507-C00F8D038876}.Debug|x64.Build.0 = Debug|x64
+		{EAB3986C-6B7A-4D3C-8507-C00F8D038876}.Debug|x86.ActiveCfg = Debug|Win32
+		{EAB3986C-6B7A-4D3C-8507-C00F8D038876}.Debug|x86.Build.0 = Debug|Win32
+		{EAB3986C-6B7A-4D3C-8507-C00F8D038876}.Release|x64.ActiveCfg = Release|x64
+		{EAB3986C-6B7A-4D3C-8507-C00F8D038876}.Release|x64.Build.0 = Release|x64
+		{EAB3986C-6B7A-4D3C-8507-C00F8D038876}.Release|x86.ActiveCfg = Release|Win32
+		{EAB3986C-6B7A-4D3C-8507-C00F8D038876}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

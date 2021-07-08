@@ -11,10 +11,14 @@ Board::Board()
 		}
 }
 Board::Board(const Board& board) {
-	this->whiteCastleLeft =this->undoWhiteCastleLeft = board.whiteCastleLeft;
-	this->whiteCastleRight =this->undoWhiteCastleRight = board.whiteCastleRight;
-	this->blackCastleLeft =this->undoBlackCastleLeft=  board.blackCastleLeft;
-	this->blackCastleRight =this ->undoBlackCastleRight = board.blackCastleRight;
+	this->whiteCastleLeft = board.whiteCastleLeft;
+	this->undoWhiteCastleLeft = undoWhiteCastleLeft;
+	this->whiteCastleRight = board.whiteCastleRight;
+	this->undoWhiteCastleRight = undoWhiteCastleRight;
+	this->blackCastleLeft = board.blackCastleLeft;
+	this->undoBlackCastleLeft = undoBlackCastleLeft;
+	this->blackCastleRight = board.blackCastleRight;
+	this->undoBlackCastleRight = undoBlackCastleRight;
 	for (int i = 0; i <= 7; i++)
 		for (int j = 0; j <= 7; j++)
 		{
