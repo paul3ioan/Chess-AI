@@ -32,11 +32,11 @@ class Piece;
 class Move;
 class Board {
 public:
-	bool whiteCastleLeft = true, whiteCastleRight = true;
-	bool blackCastleLeft = true, blackCastleRight = true;
+	bool whiteCastleLeft = false, whiteCastleRight = false;
+	bool blackCastleLeft = false, blackCastleRight = false;
 
-	bool undoWhiteCastleLeft = true, undoWhiteCastleRight = true;
-	bool undoBlackCastleLeft = true, undoBlackCastleRight = true;
+	bool undoWhiteCastleLeft = false, undoWhiteCastleRight = false;
+	bool undoBlackCastleLeft = false, undoBlackCastleRight = false;
 	std::vector<Move> moveList;
 	std::string moveNotationList;
 	short int attackedWhite[8][8], attackedBlack[8][8];

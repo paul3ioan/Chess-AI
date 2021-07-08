@@ -76,12 +76,11 @@ bool Board::makeMove(Move move)
 	this->doMove(&move);
 	// make move on board
 	if (this->isValid(&move))
-	{		
-		this->makeAttackBoard();
-	}
+		;
 	else
 	{
 		this->undoMove(&move);
+		this->makeAttackBoard();
 		return false;
 	}
 	auto from = move.from.poz;
@@ -90,12 +89,12 @@ bool Board::makeMove(Move move)
 	
 	//make the notation of the move
 	std::string moveCode;
-	from.first = from.first + 'a';
-	to.first = from.first + 'a' ;
-	moveCode += from.first;
-	moveCode += from.second;
-	moveCode += to.first;
-	moveCode += to.first;
+	char fromLine = '8' - from.first , fromCol = from.second + 'a';
+	char toLine = '8' - to.first, toCol = to.second + 'a';
+	moveCode += fromCol;
+	moveCode += fromLine;
+	moveCode += toCol;
+	moveCode += toLine;
 	moveCode += ' ' ;
 	moveNotationList += moveCode;
 	return true;
@@ -165,24 +164,26 @@ void Board::doMove(Move* move)
 		//move the king first
 		basicMove( move);
 		//move the rook
-		int whichLine =  move->piece->color == Color::white ? 0 : 7;
-		if (fromy == 6)
+		int whichLine =  move->piece->color == Color::white ? 7 : 0;
+		if (toy == 6)
 		{
 			Piece* movedRook = this->board[whichLine][7].second;
 			this->board[whichLine][5] = { movedRook->getPieceCode( move->piece->color),movedRook };
 			this->board[whichLine][7] = { PieceCode::empty, nullptr };
+			movedRook->poz.poz = {whichLine, 5};
 		}
-		if (fromy == 2)
+		if (toy == 2)
 		{
 
 			Piece* movedRook = this->board[whichLine][0].second;
 			this->board[whichLine][3] = { movedRook->getPieceCode( move->piece->color),movedRook };
 			this->board[whichLine][0] = { PieceCode::empty, nullptr };
+			movedRook->poz.poz = { whichLine, 3 };
 		}
 	}
 	if (move->moveType == MoveType::rook)
 	{
-		int whichLine =  move->piece->color == Color::white ? 0 : 7;
+		int whichLine =  move->piece->color == Color::white ? 7 : 0;
 		if (fromx == fromy and fromy == whichLine)
 		{
 			if (whichLine == 0)
@@ -226,6 +227,7 @@ void Board::basicMove( Move* move)
 	{
 		this->board[tox][toy] = { piece->getPieceCode( move->piece->color),piece };
 		this->board[fromx][fromy] = { PieceCode::empty, nullptr };
+		move->piece->poz =  move->to ;
 	}
 	else
 	{
@@ -234,6 +236,7 @@ void Board::basicMove( Move* move)
 		this->pieceList.erase(newEnd, this->pieceList.end());
 		this->board[tox][toy] = { piece->getPieceCode(move->piece->color),piece };
 		this->board[fromx][fromy] = { PieceCode::empty, nullptr };
+		move->piece->poz = move->to;
 	}
 }
 bool Board::isValid(Move* move)
@@ -308,18 +311,19 @@ void Board::undoMove(Move* move)
 			Piece* movedRook =  this->board[move->from.poz.first][5].second;
 			this->board[move->from.poz.first][7] = { movedRook->getPieceCode(movedRook->color), movedRook };
 			this->board[move->from.poz.first][5] = { PieceCode::empty, nullptr };
+			movedRook->poz.poz = { move->from.poz.first, 7 };
 		}
 		if (move->to.poz.second == 2)
 		{
-			Piece* movedRook = this->board[move->from.poz.first][5].second;
+			Piece* movedRook = this->board[move->from.poz.first][3].second;
 			this->board[move->from.poz.first][0] = { movedRook->getPieceCode(movedRook->color), movedRook };
 			this->board[move->from.poz.first][3] = { PieceCode::empty, nullptr };
+			movedRook->poz.poz = { move->from.poz.first, 0 };
 		}
 	}
 	if (move->moveType == MoveType::enpasant)
 	{
-		//this->board[move->from.poz.first][move->to.poz.second] = { this->capturedPiece->getPieceCode(this->capturedPiece->color), this->capturedPiece };
-		//capturedPiece = nullptr;
+	
 		basicUndoMove(move);
 	}
 	if (move->moveType == MoveType::promote)
@@ -331,7 +335,7 @@ void Board::undoMove(Move* move)
 		Piece* newPiece = this->capturedPiece;
 		this->capturedPiece = nullptr;
 		this->board[move->from.poz.first][move->from.poz.second] = { newPiece->getPieceCode(newPiece->color), newPiece };
-		pieceList.push_back(newPiece);
+		this->pieceList.push_back(newPiece);
 	}
 
 }
@@ -341,16 +345,16 @@ void Board::basicUndoMove(Move* move)
 	int toy = move->to.poz.second;
 	int fromx = move->from.poz.first;
 	int fromy = move->from.poz.second;
-	if (move->piece == nullptr)
-	{
-		std::cout << "LOL NOOB";
-		exit(0);
-	}
+
 		this->board[fromx][fromy] = { move->piece->getPieceCode(move->piece->color),move->piece };
 	this->board[tox][toy] = { PieceCode::empty, nullptr };
 	if (this->capturedPiece != nullptr)
 	{
-		this->board[tox][toy] = { this->capturedPiece->getPieceCode(this->capturedPiece->color), this->capturedPiece };
+		int capturedX = this->capturedPiece->poz.poz.first;
+		int capturedY = this->capturedPiece->poz.poz.second;
+		this->board[capturedX][capturedY] = { this->capturedPiece->getPieceCode(this->capturedPiece->color), this->capturedPiece };
+		this->pieceList.push_back(capturedPiece);
 		this->capturedPiece = nullptr;
 	}
+	move->piece->poz = move->from;
 }

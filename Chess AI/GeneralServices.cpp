@@ -25,11 +25,66 @@ void createPiece(int pozx, int pozy, uint8_t color, Board& board)
 
  void GeneralServices::loadPosition(Board& board)
 {
+	 
 	std ::ifstream cin("position.txt");
 	std::string position, moveList;
 	cin >> position;
+	int line = 0, col = 0;
+	for (char c : position)
+	{
+		if (c <= '9' and c >= '0')
+		{
+			col += c - '0';
+		}
+		else
+			if (c == '/')
+				line++, col = 0;
+			else
+			{
+				switch (c)
+				{
+					case 'r':
+						createPiece<Rook>(line, col, 'b', board);
+						break;
+					case 'b':
+						createPiece<Bishop>(line, col, 'b', board);
+						break;
+					case 'k':
+						createPiece<King>(line, col, 'b', board);
+						break;
+					case 'q':
+						createPiece<Queen>(line, col, 'b', board);
+						break;
+					case 'p':
+						createPiece<Pawn>(line, col, 'b', board);
+						break;
+					case 'n':
+						createPiece<Knight>(line, col, 'b', board);
+						break;
+					case 'R':
+						createPiece<Rook>(line, col, 'w', board);
+						break;
+					case 'N':
+						createPiece<Knight>(line, col, 'w', board);
+						break;
+					case 'B':
+						createPiece<Bishop>(line, col, 'w', board);
+						break;
+					case 'Q':
+						createPiece<Queen>(line, col, 'w', board);
+						break;
+					case 'K':
+						createPiece<King>(line, col, 'w', board);
+						break;
+					case 'P':
+						createPiece<Pawn>(line, col, 'w', board);
+						break;
+				}
+				col++;
+			}
+	}
 	cin.close();
-	int i = 0;
+/*	int i = 0;
 	while (i < position.size()) 
 	{
 		if (position[i] >= '0' and position[i] <= '9')
@@ -93,7 +148,7 @@ void createPiece(int pozx, int pozy, uint8_t color, Board& board)
 		board.undoWhiteCastleRight = board.whiteCastleRight ;
 		board.undoBlackCastleLeft = board.blackCastleLeft ;
 		board.undoBlackCastleRight = board.blackCastleRight;
-	}
+	}*/
 	//parcurgere de string	
 	//board.pieceList.push_back(//create piece)
 }
