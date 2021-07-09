@@ -34,7 +34,8 @@ class Board {
 public:
 	bool whiteCastleLeft = false, whiteCastleRight = false;
 	bool blackCastleLeft = false, blackCastleRight = false;
-
+	int numberOfMovesWhite = 0, numberOfMovesBlack = 0;
+	Color whoMove;
 	bool undoWhiteCastleLeft = false, undoWhiteCastleRight = false;
 	bool undoBlackCastleLeft = false, undoBlackCastleRight = false;
 	std::vector<Move> moveList;

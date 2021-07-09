@@ -13,6 +13,7 @@ protected:
 	virtual void SetUp()
 	{	
 		GeneralServices::loadPosition(board);
+		GeneralServices::savePosition(board);
 		board.makeAttackBoard();
 		std::vector<Move> moves = board.getAllMoves(Color::white);
 		allMoves = moves.size();

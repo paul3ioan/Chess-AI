@@ -14,14 +14,17 @@ Board::Board()
 }
 Board::Board(const Board& board) {
 	this->whiteCastleLeft = board.whiteCastleLeft;
-	this->undoWhiteCastleLeft = undoWhiteCastleLeft;
+	this->undoWhiteCastleLeft = board.undoWhiteCastleLeft;
 	this->whiteCastleRight = board.whiteCastleRight;
-	this->undoWhiteCastleRight = undoWhiteCastleRight;
+	this->undoWhiteCastleRight = board.undoWhiteCastleRight;
 	this->blackCastleLeft = board.blackCastleLeft;
-	this->undoBlackCastleLeft = undoBlackCastleLeft;
+	this->undoBlackCastleLeft = board.undoBlackCastleLeft;
 	this->blackCastleRight = board.blackCastleRight;
-	this->undoBlackCastleRight = undoBlackCastleRight;
-	this->capturedPiece = capturedPiece;
+	this->undoBlackCastleRight = board.undoBlackCastleRight;
+	this->capturedPiece = board.capturedPiece;
+	this->numberOfMovesBlack = board.numberOfMovesBlack;
+	this->numberOfMovesWhite = board.numberOfMovesWhite;
+	this->whoMove = board.whoMove;
 	for (int i = 0; i <= 7; i++)
 		for (int j = 0; j <= 7; j++)
 		{

@@ -3,7 +3,7 @@
 #include "Piece.h"
 #include "Pawn.h"
 
-std::string pieceToString(Piece*, const Board&);
+char pieceToString(PieceCode);
 
 template<class T>
 void createPiece(int pozx, int pozy, uint8_t color, Board& board)
@@ -82,144 +82,155 @@ void createPiece(int pozx, int pozy, uint8_t color, Board& board)
 				col++;
 			}
 	}
-	cin.close();
-/*	int i = 0;
-	while (i < position.size()) 
+	cin >> position;
+	if (position == "w")
+		board.whoMove = Color::white;
+	else
+		board.whoMove = Color::black;
+	cin >> position;
+	if (position == "-")
+		;
+	else
 	{
-		if (position[i] >= '0' and position[i] <= '9')
-			break;
-		
-		uint8_t pieceType = position[i];
-		uint8_t color = position[i + 1];
-		int pozx = position[i + 2] -'0';
-		int pozy = position[i + 3] - '0';
-		
-		switch (pieceType)
+		for (char x : position)
 		{
-		case 'p':
-			createPiece<Pawn>(pozx, pozy, color, board);
-			break;
-		case 'r':
-			createPiece<Rook>(pozx, pozy, color, board);
-			break;
-		case 'k':
-			createPiece<Knight>(pozx, pozy, color, board);
-			break;
-		case 'b':
-			createPiece<Bishop>(pozx, pozy, color, board);
-			break;
-		case 'q':
-			createPiece<Queen>(pozx, pozy, color, board);
-			break;
-		case 'K':
-			createPiece<King>(pozx, pozy, color, board);
-			break;
-		default:
-			throw "Invalid piece code";
+			if (x == 'q') board.blackCastleLeft = true;
+			if (x == 'k') board.blackCastleRight = true;
+			if (x == 'Q') board.whiteCastleLeft = true;
+			if (x == 'K') board.whiteCastleRight = true;
 		}
-		i += 4;
 	}
-
-	// TODO: De testat ca e doar 0/1, altfel dam o eroare
-	if (i != position.size())
+	cin >> position;
+	if (position != "-")
 	{
-		if (position[i] == '1')
-			board.whiteCastleLeft = true;
-		
-		else
-			board.whiteCastleLeft = false;
-
-		if (position[i + 1] == '1')
-			board.whiteCastleRight = true;
-		else
-			board.whiteCastleRight = false;
-
-		if (position[i + 2] == '1')
-			board.blackCastleLeft = true;
-		else
-			board.blackCastleLeft = false;
-
-		if (position[i + 3] == '1')
-			board.blackCastleRight = true;
-		else
-			board.blackCastleRight = false;
-		board.undoWhiteCastleLeft = board.whiteCastleLeft ;
-		board.undoWhiteCastleRight = board.whiteCastleRight ;
-		board.undoBlackCastleLeft = board.blackCastleLeft ;
-		board.undoBlackCastleRight = board.blackCastleRight;
-	}*/
-	//parcurgere de string	
-	//board.pieceList.push_back(//create piece)
+		int xCoord = position[0] - 'a';
+		int yCoord = position[1] - '1';
+		Color whichColor = (yCoord == 1 ? Color::white : Color::black);
+		Move enpasant(Position ({xCoord, whichColor == Color::white ? 1 : 6 }),
+			Position({xCoord, whichColor == Color::white ? 3 : 4
+	}), MoveType::doubleUp, board.board[xCoord][yCoord].second);
+		board.moveList.push_back(enpasant);
+	}
+	char numberOfMoves;
+	
+	while (cin >>numberOfMoves)
+	{
+		board.numberOfMovesWhite = int(numberOfMoves - '0');
+		cin >> numberOfMoves;
+		board.numberOfMovesBlack = int(numberOfMoves - '0');
+		break;
+	}
+	cin.close();
 }
 
 void GeneralServices::savePosition(const Board& board)
 {
-	std::ofstream fout("position.txt");
-	fout << createPosition(board)<< '\n';
-	//cout <<moveList;
-	fout.close();
+	//std::ofstream fout("position.txt");
+	std::cout<< createPosition(board)<< '\n';
+	//fout.close();
 }
 
 std::string GeneralServices::createPosition(const Board& board)
 {
-	std::string position;
+	//std::ofstream cout("savedPosition");
+	std::string output = "";
+	int empty = 0;
+		for (int i = 0 ; i < 8 ; i ++, (i != 8 ? output += "/" : output += "") )
+		{
+			empty = 0;
+			for (int j = 0;j < 8;j++ )
+			{
+				if (board.board[i][j].first == PieceCode::empty)
+					empty++;
+				else
+				{
+					if (empty)
+					{
+						char number = empty +'0';
+						output+= number;
+						empty = 0;
+						
+					}
+					output += pieceToString(board.board[i][j].first);
+				}
+			}
+			if (empty)
+			{
+				char number = empty + '0';
+				output += number;
+			}
 
-	for (auto* piece : board.pieceList)
-	{
-		position += pieceToString(piece, board);
-	}
-	//std::cout <<'\n'<< position<<'\n';
-	if (board.whiteCastleLeft)
-		position += "1";
-	else
-		position += "0";
+		}
+		output += " ";
+		if (board.whoMove == Color::white)
+			output += 'w';
+		else
+			output += 'b';
+		output += " ";
+		
 
-	if (board.whiteCastleRight)
-		position += "1";
-	else
-		position += "0";
-
-	if (board.blackCastleLeft)
-		position += "1";
-	else
-		position += "0";
-
-	if (board.blackCastleRight)
-		position += "1";
-	else
-		position += "0";
-	//std::cout << '\n' << position << '\n';
-	return position;
+		// check for castle
+		std::string castles = "";
+		if (board.blackCastleLeft) castles += 'q';
+		if (board.blackCastleRight) castles += 'k';
+		if (board.whiteCastleLeft) castles += 'Q';
+		if (board.whiteCastleRight) castles += 'K';
+		if (castles == "")
+			output += "- ";
+		else
+			output += castles, output +=" ";
+		if (board.moveList.size() != 0)
+		{
+			Move lastMove = board.moveList[board.moveList.size() - 1];
+			if (lastMove.moveType == MoveType::doubleUp)
+			{
+				std::string move = "";
+				char col = lastMove.from.poz.first + 'a';
+				char line = lastMove.from.poz.second == 1 ? '3' : '5';
+				move = line + col;
+				output += move;
+				output += " ";
+			}
+			else
+				output += "- ";
+		}
+		else
+			output += "- ";
+		output += board.numberOfMovesWhite + '0';
+		output += " ";
+		output += board.numberOfMovesBlack + '0';
+		return output;
 }
 
-std::string pieceToString(Piece* piece, const Board& board)
+char pieceToString(PieceCode piece)
 {
-	//uint8_t leftCastle, rightCastle;
-	int pozx = piece->poz.poz.first + '0';
-	uint8_t color, pieceType='0';
-	int pozy = piece->poz.poz.second+ '0';
-	std::string pieceString;
-	if (piece->color == Color::white)
-		color = 'w';
-	else
-		color = 'b';
-	PieceCode pieceName = piece->getPieceCode(piece->color);
-	if (pieceName == PieceCode::blackBishop or pieceName == PieceCode::whiteBishop)
-		pieceType = 'b';
-	if (pieceName == PieceCode::blackQueen or pieceName == PieceCode::whiteQueen)
-		pieceType = 'q';
-	if (pieceName == PieceCode::blackKing or pieceName == PieceCode::whiteKing)
-		pieceType = 'K';
-	if (pieceName == PieceCode::blackKnight or pieceName == PieceCode::whiteKnight)
-		pieceType = 'k';
-	if (pieceName == PieceCode::blackRook or pieceName == PieceCode::whiteRook)
-		pieceType = 'r';
-	if (pieceName == PieceCode::blackPawn or pieceName == PieceCode::whitePawn)
-		pieceType = 'p';
-	pieceString += pieceType;
-	pieceString += color;
-	pieceString += pozx;
-	pieceString += pozy;
-
-	return pieceString;
+	switch (piece)
+	{
+	case PieceCode::whiteKing:
+		return 'K';
+	case PieceCode::whiteQueen:
+		return 'Q';
+	case PieceCode::whiteBishop:
+		return 'B';
+	case PieceCode::whiteKnight:
+		return 'N';
+	case PieceCode::whiteRook:
+		return 'R';
+	case PieceCode::whitePawn:
+		return 'P';
+	case PieceCode::blackKing:
+		return 'k';
+	case PieceCode::blackQueen:
+		return 'q';
+	case PieceCode::blackBishop:
+		return 'b';
+	case PieceCode::blackKnight:
+		return 'n';
+	case PieceCode::blackRook:
+		return 'r';
+	case PieceCode::blackPawn:
+		return 'p';
+	case PieceCode::empty:
+		throw NAN;
+	}
 }
