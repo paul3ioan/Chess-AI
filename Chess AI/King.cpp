@@ -22,10 +22,19 @@ std::vector<Move >King::getLegalMoves(const Board& board)
 
 		if (line < 0 or col < 0 or line >7 or col > 7)
 			continue;
-
-		if (this->checkDifferentColor(board, line, col, this->color) and !board.attackedWhite[line][col])
+		if (this->checkDifferentColor(board, line, col, this->color))
 		{
-			possibleMoves.emplace_back(Position(poz), Position(std::make_pair(line , col)), MoveType::king, this);
+			if (this->color == Color::white)
+			{
+				if (board.attackedWhite[line][col])
+					continue;
+			}
+			else
+			{
+				if (board.attackedBlack[line][col])
+					continue;
+			}
+			possibleMoves.emplace_back(Position(poz), Position(std::make_pair(line, col)), MoveType::king, this);
 		}
 	}
 	//castles

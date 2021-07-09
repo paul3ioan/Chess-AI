@@ -25,8 +25,7 @@ void createPiece(int pozx, int pozy, uint8_t color, Board& board)
 
  void GeneralServices::loadPosition(Board& board)
 {
-	 
-	std ::ifstream cin("position.txt");
+	 std::ifstream cin("../Chess AI/position.txt");
 	std::string position, moveList;
 	cin >> position;
 	int line = 0, col = 0;

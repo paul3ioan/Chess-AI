@@ -6,6 +6,8 @@ Board::Board()
 	for (int i = 0; i <= 7; i++)
 		for (int j = 0; j <= 7; j++)
 		{
+			this->attackedBlack[i][j] = 0;
+			this->attackedWhite[i][j] = 0;
 			this->board[i][j].first = PieceCode::empty;
 			this->board[i][j].second = nullptr;
 		}
@@ -19,10 +21,12 @@ Board::Board(const Board& board) {
 	this->undoBlackCastleLeft = undoBlackCastleLeft;
 	this->blackCastleRight = board.blackCastleRight;
 	this->undoBlackCastleRight = undoBlackCastleRight;
+	this->capturedPiece = capturedPiece;
 	for (int i = 0; i <= 7; i++)
 		for (int j = 0; j <= 7; j++)
 		{
-			
+			this->attackedBlack[i][j] = board.attackedBlack[i][j];
+			this->attackedWhite[i][j] = board.attackedWhite[i][j];
 			this->board[i][j].first = board.board[i][j].first;
 			if (this->board[i][j].first == PieceCode::empty)
 			{
@@ -110,11 +114,11 @@ void Board::makeAttackBoard()
 {
 	for (int i = 0;i < 8;i++)
 		for (int j = 0; j < 8;j++)
-			attackedBlack[i][j] = 0;
+			this->attackedBlack[i][j] = 0;
 	//reset attacked board for white
 	for (int i = 0;i < 8;i++)
 		for (int j = 0; j < 8;j++)
-			attackedWhite[i][j] = 0;
+			this->attackedWhite[i][j] = 0;
 
 	for (auto piece : pieceList)
 	{
@@ -122,11 +126,18 @@ void Board::makeAttackBoard()
 		
 		for (auto move : moves)
 		{
+			//check for pawn : a pawn doesn't attack straight forward
+			if (piece->getPieceCode(piece->color) == PieceCode::whitePawn
+				or piece->getPieceCode(piece->color) == PieceCode::blackPawn)
+			{
+				if (abs(move.to.poz.second - move.from.poz.second )== 0)
+					continue;
+			}
 			if (piece->color == Color::black)
-				attackedWhite[move.to.poz.first ][move.to.poz.second] = 1;
+				this->attackedWhite[move.to.poz.first ][move.to.poz.second] = 1;
 			else
 			{
-				attackedBlack[move.to.poz.first][move.to.poz.second] = 1;
+				this->attackedBlack[move.to.poz.first][move.to.poz.second] = 1;
 				
 			}
 			
@@ -356,9 +367,12 @@ void Board::basicUndoMove(Move* move)
 	{
 		int capturedX = this->capturedPiece->poz.poz.first;
 		int capturedY = this->capturedPiece->poz.poz.second;
-		this->board[capturedX][capturedY] = { this->capturedPiece->getPieceCode(this->capturedPiece->color), this->capturedPiece };
-		this->pieceList.push_back(capturedPiece);
+		Piece* newPiece = this->capturedPiece;
+		this->board[capturedX][capturedY] = { newPiece->getPieceCode(this->capturedPiece->color), newPiece };
+		
+		this->pieceList.push_back(newPiece);
 		this->capturedPiece = nullptr;
 	}
 	move->piece->poz = move->from;
+	
 }

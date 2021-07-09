@@ -5,10 +5,10 @@
 #include "Board.h"
 #include "GeneralServices.h"
 using namespace std;
-int test(Board& board, int);
+int test(Board* board, int);
 const int maxDepth = 1;
 set<string> wrongMoves;
-int main()
+/*int main()
 {
 	
 	Board board;
@@ -16,16 +16,18 @@ int main()
 	GeneralServices::loadPosition(board);
 	vector<Move> moves;
 	
-	cout <<test(board, 0)<<'\n';
+//	cout << board.pieceList.size() << '\n';
+	//cout <<test(&board, 0)<<'\n';
 	for (auto i : wrongMoves)
 		cout << i << '\n';
 	//cout << board.moveNotationList;
-	//for (int i = 0; i <= 7; i++, cout << '\n')
-		//for (int j = 0; j <= 7; j++)
-			//if (board.board[i][j].first != PieceCode::empty)
-				//cout << "1 ";
-			//else
-				//cout << "0 ";
+	//cout <<'\n'<< board.pieceList.size();
+	for (int i = 0; i <= 7; i++, cout << '\n')
+		for (int j = 0; j <= 7; j++)
+			if (board.board[i][j].first != PieceCode::empty)
+				cout << "1 ";
+			else
+				cout << "0 ";
 	
 	//for (auto piece : board.pieceList)
 //	{
@@ -38,21 +40,22 @@ int main()
 		
 	//	cout <<(piece->color == Color::white ? "white " : "black ")<< piece_moves.size() << '\n';
 	
-}
-int test(Board& board, int depth)
+}*/
+int test(Board* board, int depth)
 {
-	
+	//boardul cand isi ia undoMove pierde capturedPieceul daca se captureaza la urm mutare o piesa
 	vector<Move> moves;
 	int ans = 0;
 	if (depth % 2 == 0)
-		moves = board.getAllMoves(Color::white);
-	
+		moves = board->getAllMoves(Color::white);
 	else
-		moves = board.getAllMoves(Color::black);
+		moves = board->getAllMoves(Color::black);
+	// moves pe black nu da mutari
+	//pionii in makeAttack ataca si campul din fata
 	for (auto move : moves)
 	{
 		
-		if (!board.makeMove(move))
+		if (!board->makeMove(move))
 		{
 			auto from = move.from.poz;
 			auto to = move.to.poz;
@@ -73,11 +76,11 @@ int test(Board& board, int depth)
 		if (depth >= maxDepth)
 		{
 			ans++;
-			board.undoMove(&move);
+			board->undoMove(&move);
 			continue;
 		}
 		ans += test(board, depth + 1);
-		board.undoMove(&move);
+		board->undoMove(&move);
 	}
 	return ans;
 }
