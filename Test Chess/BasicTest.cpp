@@ -24,7 +24,8 @@ int BasicTest::test(Board& board, int depth)
 			auto from = move.from.poz;
 			auto to = move.to.poz;
 			// make move in moveList
-
+			if (board.capturedPiece != nullptr)
+				captureMoves++;
 			//make the notation of the move
 			std::string moveCode;
 			char fromLine = '8' - from.first, fromCol = from.second + 'a';
@@ -39,6 +40,9 @@ int BasicTest::test(Board& board, int depth)
 		}
 		if (depth >= maxDepth)
 		{
+			if (move.moveType == MoveType::promote)
+				ans += 4;
+			else
 			ans++;
 			board.undoMove(&move);
 			continue;

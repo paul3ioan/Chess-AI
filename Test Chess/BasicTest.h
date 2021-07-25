@@ -9,6 +9,7 @@ protected:
 	int maxDepth = 0;
 	int allMoves = -1;
 	int possibleMoves = 0;
+	
 	Board board;
 	virtual void SetUp()
 	{	
