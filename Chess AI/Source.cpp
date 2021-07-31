@@ -5,82 +5,109 @@
 #include "Board.h"
 #include "GeneralServices.h"
 using namespace std;
-int test(Board* board, int);
-const int maxDepth = 1;
-set<string> wrongMoves;
+void loop();
+
+Piece* getPiece(Board& board, string arg);
+pair<string, string> decodeCommand(string command);
+Move getMove(Board& board, string);
 /*int main()
 {
-	
-	Board board;
-
-	GeneralServices::loadPosition(board);
-	vector<Move> moves;
-	
-//	cout << board.pieceList.size() << '\n';
-	//cout <<test(&board, 0)<<'\n';
-	for (auto i : wrongMoves)
-		cout << i << '\n';
-	//cout << board.moveNotationList;
-	//cout <<'\n'<< board.pieceList.size();
-	for (int i = 0; i <= 7; i++, cout << '\n')
-		for (int j = 0; j <= 7; j++)
-			if (board.board[i][j].first != PieceCode::empty)
-				cout << "1 ";
-			else
-				cout << "0 ";
-	
-	//for (auto piece : board.pieceList)
-//	{
-	//	auto piece_moves = piece->getLegalMoves(board);
-	//	if (piece->getPieceCode(piece->color) == PieceCode::whitePawn)
-	//	{
-	//		cout << piece->poz.poz.first << " " << piece->poz.poz.second << ":  ";
-	//	}
-
-		
-	//	cout <<(piece->color == Color::white ? "white " : "black ")<< piece_moves.size() << '\n';
-	
+	loop();
 }*/
-int test(Board* board, int depth)
+void loop()
 {
-	//boardul cand isi ia undoMove pierde capturedPieceul daca se captureaza la urm mutare o piesa
-	vector<Move> moves;
-	int ans = 0;
-	if (depth % 2 == 0)
-		moves = board->getAllMoves(Color::white);
-	else
-		moves = board->getAllMoves(Color::black);
-	// moves pe black nu da mutari
-	//pionii in makeAttack ataca si campul din fata
-	for (auto move : moves)
+	Board board;
+	//GeneralServices::loadPosition(board, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+	while (1)
 	{
-		
-		if (!board->makeMove(move))
-		{
-			auto from = move.from.poz;
-			auto to = move.to.poz;
-			// make move in moveList
+		string input;
+		getline(cin, input);
+		auto [command, arguments] = decodeCommand(input);
+		if (command == "loadPosition")
+		//	GeneralServices::loadPosition(board, arguments)
+			;
+		else
+			if (command == "savePosition")
+				GeneralServices::savePosition(board);
+			else
+				if (command == "getMovesPiece")
+				{
+					
+					Piece* piece = getPiece(board,arguments);
+					auto moves = piece->getLegalMoves(board);
+					for (auto move : moves)
+					{
+						int line = move.to.poz.first;
+						int col = move.to.poz.second;
+						cout << (line * 8) + col << '\n';
+					}
+					// check for pin 
+					// make notation functie si pusa aici
+				}
+				else
+					if (command == "playerMove")
+					{
+						auto move = getMove(board, arguments);
+						cout << arguments<<'\n';
+						}
+					else if (command == "playerUndo")
+						auto move = getMove(board, arguments);
+					else
+						if (command == "AI move")
+							;
 
-			//make the notation of the move
-			std::string moveCode;
-			char fromLine = '8' - from.first, fromCol = from.second + 'a';
-			char toLine = '8' - to.first, toCol = to.second + 'a';
-			moveCode += fromCol;
-			moveCode += fromLine;
-			moveCode += toCol;
-			moveCode += toLine;
-			moveCode += ' ';
-			wrongMoves.insert(moveCode);
-			continue;
-		}
-		if (depth >= maxDepth)
-		{
-			ans++;
-			board->undoMove(&move);
-			continue;
-		}
-		ans += test(board, depth + 1);
-		board->undoMove(&move);
 	}
-	return ans;
+}
+pair<string, string> decodeCommand(string command)
+{
+	int pozSpace = command.find(' ');
+	return 
+	{
+		command.substr(0, pozSpace), command.substr(pozSpace + 1)
+	};
+}
+Piece* getPiece(Board& board, string arg)
+{
+	int line = arg[1] - '1';
+	int col = arg[0] - 'a';
+	return board.board[line][col].second;
+}
+Move getMove(Board& board,string arguments)
+{
+	int fromLine = arguments[0]-'a', fromCol = arguments[1]-'0';
+	int toLine = arguments[2]-'a', toCol = arguments[3]-'0';
+	Piece* piece = board.board[fromLine][fromCol].second;
+	MoveType moveType;
+	switch (arguments[5])
+	{
+	case'b':
+		moveType = MoveType::basic;
+		break;
+
+	case'c':
+		moveType = MoveType::castle;
+		break;
+
+	case'p':
+		moveType = MoveType::promote;
+		break;
+
+	case'e':
+		moveType = MoveType::enpasant;
+		break;
+
+	case'd':
+		moveType = MoveType::doubleUp;
+		break;
+
+	case'r':
+		moveType = MoveType::rook;
+		break;
+	case'k':
+		moveType = MoveType::king;
+		break;
+	default:
+		break;
+	}
+	return Move(Position({ fromLine, fromCol }), Position({ toLine, toCol }), moveType, piece);
 }

@@ -25,9 +25,10 @@ void createPiece(int pozx, int pozy, uint8_t color, Board& board)
 
  void GeneralServices::loadPosition(Board& board)
 {
-	 std::ifstream cin("../Chess AI/position.txt");
+	 
+	 std::ifstream fin("../Chess AI/position.txt");
 	std::string position, moveList;
-	cin >> position;
+	fin >> position;
 	int line = 0, col = 0;
 	for (char c : position)
 	{
@@ -82,12 +83,17 @@ void createPiece(int pozx, int pozy, uint8_t color, Board& board)
 				col++;
 			}
 	}
-	cin >> position;
+	/// <summary>
+	/// fain   de facut cin  
+	/// </summary>
+	/// <param name="board"></param>
+	/// <param name="position"></param>
+	fin >> position;
 	if (position == "w")
 		board.whoMove = Color::white;
 	else
 		board.whoMove = Color::black;
-	cin >> position;
+	fin >> position;
 	if (position == "-")
 		;
 	else
@@ -100,7 +106,7 @@ void createPiece(int pozx, int pozy, uint8_t color, Board& board)
 			if (x == 'K') board.whiteCastleRight = true;
 		}
 	}
-	cin >> position;
+	fin >> position;
 	if (position != "-")
 	{
 		int xCoord = position[0] - 'a';
@@ -113,14 +119,14 @@ void createPiece(int pozx, int pozy, uint8_t color, Board& board)
 	}
 	char numberOfMoves;
 	
-	while (cin >>numberOfMoves)
+	while (fin >>numberOfMoves)
 	{
 		board.numberOfMovesWhite = int(numberOfMoves - '0');
-		cin >> numberOfMoves;
+		fin >> numberOfMoves;
 		board.numberOfMovesBlack = int(numberOfMoves - '0');
 		break;
 	}
-	cin.close();
+	fin.close();
 }
 
 void GeneralServices::savePosition(const Board& board)
@@ -132,7 +138,7 @@ void GeneralServices::savePosition(const Board& board)
 
 std::string GeneralServices::createPosition(const Board& board)
 {
-	//std::ofstream cout("savedPosition");
+	
 	std::string output = "";
 	int empty = 0;
 		for (int i = 0 ; i < 8 ; i ++, (i != 8 ? output += "/" : output += "") )

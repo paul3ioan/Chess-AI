@@ -109,7 +109,7 @@ bool Board::makeMove(Move move)
 	moveCode += ' ' ;
 	moveNotationList += moveCode;
 	return true;
-	/// problem moveCode for promotion
+	
 	//put move in moveList
 	//moveList.emplace_back(Position({ '1','2' }), Position({ '2','3' }), MoveType::basic); crapa
 }

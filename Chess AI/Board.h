@@ -1,14 +1,8 @@
 #pragma once
 #include <vector>
+#include <stack>
 #include "Position.h"
-//#include "King.h"
-//#include "Pawn.h"
-//#include "Bishop.h"
-//#include "Rook.h"
-//#include "Queen.h"
-//#include "Knight.h"
 
-//#include "Piece.h"
 enum class PieceCode : uint8_t
 {
 	whiteKing,
@@ -43,6 +37,7 @@ public:
 	short int attackedWhite[8][8], attackedBlack[8][8];
 	std::vector<Piece*> pieceList;
 	Piece* capturedPiece;
+	// stack capturedPieces
 	Board();
 	Board(const Board& board);
 	~Board();

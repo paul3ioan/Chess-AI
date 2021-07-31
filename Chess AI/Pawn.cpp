@@ -37,7 +37,7 @@ std::vector<Move >Pawn::getLegalMoves(const Board& board)
 			possibleMoves.emplace_back( Position(poz), Position(std::make_pair(poz.first + 1, poz.second + 1)), MoveType::basic,this);
 		}
 		//check capture left
-		if (ans.second -1 >0 and checkDifferentColor(board, ans.first + 1, ans.second - 1, Color::black) and
+		if (ans.second -1 >=0 and checkDifferentColor(board, ans.first + 1, ans.second - 1, Color::black) and
 			board.board[ans.first + 1][ans.second - 1].first != PieceCode::empty)
 		{
 			possibleMoves.emplace_back( Position(poz), Position(std::make_pair(poz.first + 1, poz.second - 1)),MoveType::basic,this);
@@ -79,7 +79,7 @@ std::vector<Move >Pawn::getLegalMoves(const Board& board)
 			possibleMoves.emplace_back( Position(poz), Position(std::make_pair(poz.first - 1, poz.second + 1)), MoveType::basic,this);
 		}
 		//check capture left
-		if (ans.second - 1 > 0 and checkDifferentColor(board, ans.first - 1, ans.second - 1, Color::white) and
+		if (ans.second - 1 >= 0 and checkDifferentColor(board, ans.first - 1, ans.second - 1, Color::white) and
 			board.board[ans.first - 1][ans.second - 1].first != PieceCode::empty)
 		{
 			possibleMoves.emplace_back( Position(poz), Position(std::make_pair(poz.first - 1, poz.second - 1)), MoveType::basic,this);
