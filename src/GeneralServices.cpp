@@ -25,8 +25,12 @@ void createPiece(int pozx, int pozy, uint8_t color, Board& board)
 
  void GeneralServices::loadPosition(Board& board)
 {
-	 
-	 std::ifstream fin(R"(C:\Users\paul\source\repos\Chess AI\Chess AI\position.txt)");
+     std::ifstream fin(R"(/home/vlad/Chess-AI/src/position.txt)");
+     if (!fin)
+     {
+         std::cout << "Could not open position file\n";
+         exit(1);
+     }
 	std::string position, moveList;
 	fin >> position;
 	int line = 0, col = 0;

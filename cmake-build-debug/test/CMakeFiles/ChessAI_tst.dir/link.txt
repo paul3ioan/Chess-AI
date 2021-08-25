@@ -1,1 +1,0 @@
-/usr/bin/clang++ -g CMakeFiles/ChessAI_tst.dir/BasicTest.cpp.o CMakeFiles/ChessAI_tst.dir/main.cpp.o CMakeFiles/ChessAI_tst.dir/test.cpp.o -o ChessAI_tst  ../src/libChessAI_lib.a ../lib/libgtest_maind.a ../lib/libgtestd.a -lpthread 
