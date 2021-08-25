@@ -1,0 +1,4 @@
+/home/vlad/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/203.6682.181/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -G "CodeBlocks - Unix Makefiles" /home/vlad/Chess-AI
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/vlad/Chess-AI/cmake-build-debug
