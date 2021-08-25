@@ -34,13 +34,13 @@ std::vector<Move >Pawn::getLegalMoves(const Board& board)
 		if (ans.second + 1 < 8 and checkDifferentColor(board, ans.first + 1, ans.second + 1, Color::black) and
 			board.board[ans.first + 1][ans.second + 1].first != PieceCode::empty)
 		{
-			possibleMoves.emplace_back( Position(poz), Position(std::make_pair(poz.first + 1, poz.second + 1)), MoveType::basic,this);
+			possibleMoves.emplace_back( Position(poz), Position(std::make_pair(poz.first + 1, poz.second + 1)), ans.first + 1 == 7 ? MoveType::promote : MoveType::basic, this);
 		}
 		//check capture left
 		if (ans.second -1 >=0 and checkDifferentColor(board, ans.first + 1, ans.second - 1, Color::black) and
 			board.board[ans.first + 1][ans.second - 1].first != PieceCode::empty)
 		{
-			possibleMoves.emplace_back( Position(poz), Position(std::make_pair(poz.first + 1, poz.second - 1)),MoveType::basic,this);
+			possibleMoves.emplace_back( Position(poz), Position(std::make_pair(poz.first + 1, poz.second - 1)), ans.first + 1 == 7 ? MoveType::promote : MoveType::basic, this);
 		}
 		// check enpasant
 		if (board.moveList.size() > 1)
@@ -76,13 +76,13 @@ std::vector<Move >Pawn::getLegalMoves(const Board& board)
 		if (ans.second + 1 < 8 and checkDifferentColor(board, ans.first - 1, ans.second + 1, Color::white) and
 			board.board[ans.first - 1][ans.second + 1].first != PieceCode::empty)
 		{
-			possibleMoves.emplace_back( Position(poz), Position(std::make_pair(poz.first - 1, poz.second + 1)), MoveType::basic,this);
+			possibleMoves.emplace_back( Position(poz), Position(std::make_pair(poz.first - 1, poz.second + 1)), ans.first - 1 == 0 ? MoveType::promote : MoveType::basic, this);
 		}
 		//check capture left
 		if (ans.second - 1 >= 0 and checkDifferentColor(board, ans.first - 1, ans.second - 1, Color::white) and
 			board.board[ans.first - 1][ans.second - 1].first != PieceCode::empty)
 		{
-			possibleMoves.emplace_back( Position(poz), Position(std::make_pair(poz.first - 1, poz.second - 1)), MoveType::basic,this);
+			possibleMoves.emplace_back( Position(poz), Position(std::make_pair(poz.first - 1, poz.second - 1)), ans.first - 1 == 0 ? MoveType::promote : MoveType::basic, this);
 		}
 		// check enpasant
 		if (board.moveList.size() > 1)

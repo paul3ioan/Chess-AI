@@ -23,5 +23,6 @@ protected:
 	virtual void TearDown() {
 	}
 	int test(Board&, int);
+	int promotingPiece(Board&, Move*);
 };
 

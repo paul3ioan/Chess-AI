@@ -26,7 +26,7 @@ void createPiece(int pozx, int pozy, uint8_t color, Board& board)
  void GeneralServices::loadPosition(Board& board)
 {
 	 
-	 std::ifstream fin("../Chess AI/position.txt");
+	 std::ifstream fin(R"(C:\Users\paul\source\repos\Chess AI\Chess AI\position.txt)");
 	std::string position, moveList;
 	fin >> position;
 	int line = 0, col = 0;
@@ -114,7 +114,7 @@ void createPiece(int pozx, int pozy, uint8_t color, Board& board)
 		Color whichColor = (yCoord == 1 ? Color::white : Color::black);
 		Move enpasant(Position ({xCoord, whichColor == Color::white ? 1 : 6 }),
 			Position({xCoord, whichColor == Color::white ? 3 : 4
-	}), MoveType::doubleUp, board.board[xCoord][yCoord].second);
+	}), MoveType::enpasant, board.board[xCoord][yCoord].second);
 		board.moveList.push_back(enpasant);
 	}
 	char numberOfMoves;

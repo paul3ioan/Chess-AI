@@ -10,21 +10,23 @@ void loop();
 Piece* getPiece(Board& board, string arg);
 pair<string, string> decodeCommand(string command);
 Move getMove(Board& board, string);
-/*int main()
+int main()
 {
 	loop();
-}*/
+}
 void loop()
 {
 	Board board;
-	//GeneralServices::loadPosition(board, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+	GeneralServices::loadPosition(board);
 	while (1)
 	{
+		int x = 5;
+
 		string input;
 		getline(cin, input);
 		auto [command, arguments] = decodeCommand(input);
 		if (command == "loadPosition")
-		//	GeneralServices::loadPosition(board, arguments)
+			//GeneralServices::loadPosition(board, arguments)
 			;
 		else
 			if (command == "savePosition")
@@ -32,15 +34,23 @@ void loop()
 			else
 				if (command == "getMovesPiece")
 				{
-					
+					//string s = "ceva";
+					//char c = s[101];
+					//throw "";
 					Piece* piece = getPiece(board,arguments);
 					auto moves = piece->getLegalMoves(board);
+					vector<int> output;
 					for (auto move : moves)
 					{
 						int line = move.to.poz.first;
 						int col = move.to.poz.second;
-						cout << (line * 8) + col << '\n';
+						output.push_back( (line * 8) + col);
+						
 					}
+					cout << output.size() << '\n';
+					for (int i : output)
+						cout << i << '\n';
+					cout.flush();
 					// check for pin 
 					// make notation functie si pusa aici
 				}
