@@ -22,11 +22,114 @@ void createPiece(int pozx, int pozy, uint8_t color, Board& board)
 		board.pieceList.push_back(piece);
 	}
 }
+void GeneralServices::restartPosition(Board& board, std::string position)
+{
+    int index = 0, line = 0 , col = 0 ;
+    while(position[index] != ' ') {
+        char c = position[index];
+        index++;
+        if (c <= '9' && c >= '0') {
+            col += c - '0';
+        } else if (c == '/')
+            line++, col = 0;
+        else {
+            switch (c) {
+                case 'r':
+                    createPiece<Rook>(line, col, 'b', board);
+                    break;
+                case 'b':
+                    createPiece<Bishop>(line, col, 'b', board);
+                    break;
+                case 'k':
+                    createPiece<King>(line, col, 'b', board);
+                    break;
+                case 'q':
+                    createPiece<Queen>(line, col, 'b', board);
+                    break;
+                case 'p':
+                    createPiece<Pawn>(line, col, 'b', board);
+                    break;
+                case 'n':
+                    createPiece<Knight>(line, col, 'b', board);
+                    break;
+                case 'R':
+                    createPiece<Rook>(line, col, 'w', board);
+                    break;
+                case 'N':
+                    createPiece<Knight>(line, col, 'w', board);
+                    break;
+                case 'B':
+                    createPiece<Bishop>(line, col, 'w', board);
+                    break;
+                case 'Q':
+                    createPiece<Queen>(line, col, 'w', board);
+                    break;
+                case 'K':
+                    createPiece<King>(line, col, 'w', board);
+                    break;
+                case 'P':
+                    createPiece<Pawn>(line, col, 'w', board);
+                    break;
+            }
+            col++;
+        }
+    }
+        index ++;
+        while(position[index] != ' ')
+        {
+            if (position[index] == 'w')
+                board.whoMove = Color::white;
+                if(position[index] == 'b')
+                    board.whoMove = Color::black;
+            index++;
+        }
+        index ++;
+        if (position == "-")
+            ;
+        else
+        {
+            while(position[index] != ' ')
+            {
+                char x=  position[index];
+                index++;
+                if (x == 'q') board.blackCastleLeft = true;
+                if (x == 'k') board.blackCastleRight = true;
+                if (x == 'Q') board.whiteCastleLeft = true;
+                if (x == 'K') board.whiteCastleRight = true;
+            }
+        }
+        index++;
+        if (position != "-")
+        {
+            int xCoord = position[index] - 'a';
+            int yCoord = position[index + 1] - '1';
+            Color whichColor = (yCoord == 1 ? Color::white : Color::black);
+            Move enpasant(Position ({xCoord, whichColor == Color::white ? 1 : 6 }),
+                          Position({xCoord, whichColor == Color::white ? 3 : 4
+                                   }), MoveType::enpasant, board.board[xCoord][yCoord].second);
+            board.moveList.push_back(enpasant);
+        }
+        index +=2;
+        if(index > position.size())
+            return;
+        //char numberOfMoves;
 
+        /*while (fin >>numberOfMoves)
+        {
+            board.numberOfMovesWhite = int(numberOfMoves - '0');
+            fin >> numberOfMoves;
+            board.numberOfMovesBlack = int(numberOfMoves - '0');
+            break;
+        }*/
+
+}
  void GeneralServices::loadPosition(Board& board)
 {
-     std::ifstream fin(R"(/home/vlad/Chess-AI/src/position.txt)");
-     if (!fin)
+     std::ifstream fin(R"(/media/storage/Documents/Chess AI/Chess-AI/src/position.txt)");
+     std::string position ;
+     std::getline(fin, position);
+     restartPosition( board, position);
+     /*if (!fin)
      {
          std::cout << "Could not open position file\n";
          exit(1);
@@ -98,39 +201,8 @@ void createPiece(int pozx, int pozy, uint8_t color, Board& board)
 	else
 		board.whoMove = Color::black;
 	fin >> position;
-	if (position == "-")
-		;
-	else
-	{
-		for (char x : position)
-		{
-			if (x == 'q') board.blackCastleLeft = true;
-			if (x == 'k') board.blackCastleRight = true;
-			if (x == 'Q') board.whiteCastleLeft = true;
-			if (x == 'K') board.whiteCastleRight = true;
-		}
-	}
-	fin >> position;
-	if (position != "-")
-	{
-		int xCoord = position[0] - 'a';
-		int yCoord = position[1] - '1';
-		Color whichColor = (yCoord == 1 ? Color::white : Color::black);
-		Move enpasant(Position ({xCoord, whichColor == Color::white ? 1 : 6 }),
-			Position({xCoord, whichColor == Color::white ? 3 : 4
-	}), MoveType::enpasant, board.board[xCoord][yCoord].second);
-		board.moveList.push_back(enpasant);
-	}
-	char numberOfMoves;
-	
-	while (fin >>numberOfMoves)
-	{
-		board.numberOfMovesWhite = int(numberOfMoves - '0');
-		fin >> numberOfMoves;
-		board.numberOfMovesBlack = int(numberOfMoves - '0');
-		break;
-	}
-	fin.close();
+
+	fin.close();*/
 }
 
 void GeneralServices::savePosition(const Board& board)

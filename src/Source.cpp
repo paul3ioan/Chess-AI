@@ -5,7 +5,8 @@
 #include "Board.h"
 #include "GeneralServices.h"
 using namespace std;
-void loop();
+
+[[noreturn]] void loop();
 
 Piece* getPiece(Board& board, string arg);
 pair<string, string> decodeCommand(string command);
@@ -13,15 +14,17 @@ Move getMove(Board& board, string);
 int main()
 {
 	loop();
+
 }
-void loop()
+
+[[noreturn]] void loop()
 {
 	Board board;
 	GeneralServices::loadPosition(board);
+
 	while (1)
 	{
 		int x = 5;
-
 		string input;
 		getline(cin, input);
 		auto [command, arguments] = decodeCommand(input);
@@ -37,6 +40,7 @@ void loop()
 					//string s = "ceva";
 					//char c = s[101];
 					//throw "";
+
 					Piece* piece = getPiece(board,arguments);
 					auto moves = piece->getLegalMoves(board);
 					vector<int> output;

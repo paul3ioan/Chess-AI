@@ -4,13 +4,17 @@
 #include <set>
 
 
-int BasicTest::test(Board& board, int depth)
+int BasicTest::test(Board& board, int depth, int maxDepth)
 {
 	//boardul cand isi ia undoMove pierde capturedPieceul daca se captureaza la urm mutare o piesa
 	std::vector<Move> moves;
 	int ans = 0;
 	int see = 0;
-	
+    int lalala = 0;
+	if(depth == 3)
+    {
+        lalala ++;
+    }
 	if (board.whoMove == Color::white)
 		moves = board.getAllMoves(Color::white);
 	else
@@ -34,7 +38,7 @@ int BasicTest::test(Board& board, int depth)
 		//	if (board.capturedPiece != nullptr)
 			//	captureMoves++;
 			///make the notation of the move
-			std::string moveCode;
+			/*std::string moveCode;
 			char fromLine = '8' - from.first, fromCol = from.second + 'a';
 			char toLine = '8' - to.first, toCol = to.second + 'a';
 			
@@ -43,7 +47,7 @@ int BasicTest::test(Board& board, int depth)
 			moveCode += toCol;
 			moveCode += toLine;
 			moveCode += ' ';
-			wrongMoves.insert(moveCode);
+			wrongMoves.insert(moveCode);*/
 			continue;
 		}
 		if (depth >= maxDepth)
@@ -64,7 +68,7 @@ int BasicTest::test(Board& board, int depth)
 		}*/
 		Board newBoard = board;
 		newBoard.whoMove = (newBoard.whoMove == Color::white ? Color::black : Color::white);
-		ans +=see = test(newBoard, depth + 1);
+		ans +=see = test(newBoard, depth + 1, maxDepth);
 			
 		board.undoMove(&move);
 		if (depth == 0) std::cout <<char(move.from.poz.second+'a') <<8 - move.from.poz.first<<

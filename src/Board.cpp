@@ -21,7 +21,7 @@ Board::Board(const Board& board) {
 	this->undoBlackCastleLeft = board.undoBlackCastleLeft;
 	this->blackCastleRight = board.blackCastleRight;
 	this->undoBlackCastleRight = board.undoBlackCastleRight;
-	this->capturedPiece = board.capturedPiece;
+	this->capturedPieces = board.capturedPieces;
 	this->numberOfMovesBlack = board.numberOfMovesBlack;
 	this->numberOfMovesWhite = board.numberOfMovesWhite;
 	this->whoMove = board.whoMove;
@@ -74,8 +74,13 @@ Board::Board(const Board& board) {
 }
 Board::~Board()
 {
-	for (auto* piece : this->pieceList)
-		delete piece;
+	//for (auto* piece : this->pieceList)
+		//delete piece;
+   /* while(!this->capturedPieces.empty())
+    {
+        delete capturedPieces.top();
+        capturedPieces.pop();
+    }*/
 }
 bool Board::makeMove(Move move)
 {
@@ -149,7 +154,7 @@ void Board::makeAttackBoard()
 }
 void Board::doMove(Move* move)
 {
-	this->capturedPiece = nullptr;
+	//this->capturedPiece = nullptr;
 	int tox = move->to.poz.first ;
 	int toy = move->to.poz.second ;
 	
@@ -215,19 +220,19 @@ void Board::doMove(Move* move)
 	}
 	if (move->moveType == MoveType::promote)
 	{
-		this->capturedPiece = this->board[fromx][fromy].second;
-		auto newEnd = std::remove(this->pieceList.begin(), this->pieceList.end(), this->capturedPiece);
+		this->capturedPieces.push( this->board[fromx][fromy].second);
+		auto newEnd = std::remove(this->pieceList.begin(), this->pieceList.end(), this->capturedPieces.top());
 		this->pieceList.erase(newEnd, this->pieceList.end());
 		this->board[fromx][fromy] = { PieceCode::empty, nullptr };
 		//for now the new piece is a queen
-		Piece* newPiece = new Queen(this->capturedPiece->color, move->to);
+		Piece* newPiece = new Queen(this->capturedPieces.top()->color, move->to);
 		this->pieceList.push_back(newPiece);
 		this->board[tox][toy] = {newPiece->getPieceCode( move->piece->color), newPiece};
 	}
 	if (move->moveType == MoveType::enpasant)
 	{
-		this->capturedPiece = this->board[fromx][toy].second;
-		auto newEnd = std::remove(this->pieceList.begin(), this->pieceList.end(), this->capturedPiece);
+		this->capturedPieces.push(this->board[fromx][toy].second);
+		auto newEnd = std::remove(this->pieceList.begin(), this->pieceList.end(), this->capturedPieces.top());
 		this->pieceList.erase(newEnd, this->pieceList.end());
 		this->board[fromx][toy] = { PieceCode::empty, nullptr };
 		basicMove(move);
@@ -249,8 +254,8 @@ void Board::basicMove( Move* move)
 	}
 	else
 	{
-		this->capturedPiece = this->board[tox][toy].second;
-		auto newEnd = std::remove(this->pieceList.begin(), this->pieceList.end(), capturedPiece);
+		this->capturedPieces.push( this->board[tox][toy].second);
+		auto newEnd = std::remove(this->pieceList.begin(), this->pieceList.end(), this->capturedPieces.top());
 		this->pieceList.erase(newEnd, this->pieceList.end());
 		this->board[tox][toy] = { piece->getPieceCode(move->piece->color),piece };
 		this->board[fromx][fromy] = { PieceCode::empty, nullptr };
@@ -349,9 +354,10 @@ void Board::undoMove(Move* move)
 		Piece* promotedPiece = this->board[move->to.poz.first][move->to.poz.second].second;
 		auto newEnd = std::remove(pieceList.begin(), pieceList.end(), promotedPiece);
 		this->pieceList.erase(newEnd, this->pieceList.end());
-		delete promotedPiece;
-		Piece* newPiece = this->capturedPiece;
-		this->capturedPiece = nullptr;
+		//delete promotedPiece;
+		Piece* newPiece = this->capturedPieces.top();
+        this->capturedPieces.pop();
+//		this->capturedPiece = nullptr;
 		this->board[move->from.poz.first][move->from.poz.second] = { newPiece->getPieceCode(newPiece->color), newPiece };
 		this->pieceList.push_back(newPiece);
 	}
@@ -366,15 +372,17 @@ void Board::basicUndoMove(Move* move)
 
 		this->board[fromx][fromy] = { move->piece->getPieceCode(move->piece->color),move->piece };
 	this->board[tox][toy] = { PieceCode::empty, nullptr };
-	if (this->capturedPiece != nullptr)
+	if (!this->capturedPieces.empty())
 	{
-		int capturedX = this->capturedPiece->poz.poz.first;
-		int capturedY = this->capturedPiece->poz.poz.second;
-		Piece* newPiece = this->capturedPiece;
-		this->board[capturedX][capturedY] = { newPiece->getPieceCode(this->capturedPiece->color), newPiece };
+        Piece* rip = this->capturedPieces.top();
+        this->capturedPieces.pop();
+		int capturedX = rip->poz.poz.first;
+		int capturedY = rip->poz.poz.second;
+		Piece* newPiece = rip;
+		this->board[capturedX][capturedY] = { newPiece->getPieceCode(rip->color), newPiece };
 		
 		this->pieceList.push_back(newPiece);
-		this->capturedPiece = nullptr;
+//		this->capturedPiece = nullptr;
 	}
 	move->piece->poz = move->from;
 	

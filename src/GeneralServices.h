@@ -14,5 +14,6 @@ public:
 	 static void loadPosition(Board& board);
 	 static void savePosition(const Board& board);
 	 static std::string createPosition(const Board& board);
+     static void restartPosition(Board& board, std::string positon);
 };
 

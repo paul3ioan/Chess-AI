@@ -31,13 +31,14 @@ public:
 	bool blackCastleLeft = false, blackCastleRight = false;
 	int numberOfMovesWhite = 0, numberOfMovesBlack = 0;
 	Color whoMove;
+    std::stack <Piece*> capturedPieces;
 	bool undoWhiteCastleLeft = false, undoWhiteCastleRight = false;
 	bool undoBlackCastleLeft = false, undoBlackCastleRight = false;
 	std::vector<Move> moveList;
 	std::string moveNotationList;
 	short int attackedWhite[8][8], attackedBlack[8][8];
 	std::vector<Piece*> pieceList;
-	Piece* capturedPiece;
+	//Piece* capturedPiece;
 	// stack capturedPieces
 	Board();
 	Board(const Board& board);
