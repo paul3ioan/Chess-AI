@@ -190,14 +190,31 @@ void Board::doMove(const Move &move)
         }
         basicMove(move);
     }
-    if (move.moveType == MoveType::promote)
+    if (move.moveType == MoveType::promoteQueen or move.moveType == MoveType::promoteBishop
+        or move.moveType == MoveType::promoteKnight or move.moveType == MoveType::promoteRook)
     {
         this->capturedPieces.push(this->board[fromx][fromy].second);
         auto newEnd = std::remove(this->pieceList.begin(), this->pieceList.end(), this->capturedPieces.top());
         this->pieceList.erase(newEnd, this->pieceList.end());
         this->board[fromx][fromy] = {PieceCode::empty, nullptr};
         //for now the new piece is a queen
-        auto newPiece = std::make_shared<Queen>(this->capturedPieces.top()->color, move.to);
+        std::shared_ptr<Piece> newPiece;
+        switch(move.moveType)
+        {
+            case MoveType::promoteKnight:
+                newPiece = std::make_shared<Knight>(this->capturedPieces.top()->color, move.to);
+                break;
+            case MoveType::promoteQueen:
+                newPiece = std::make_shared<Queen>(this->capturedPieces.top()->color, move.to);
+                break;
+            case MoveType::promoteRook:
+                newPiece = std::make_shared<Rook>(this->capturedPieces.top()->color, move.to);
+                break;
+            case MoveType::promoteBishop:
+                newPiece = std::make_shared<Bishop>(this->capturedPieces.top()->color, move.to);
+                break;
+        }
+
         this->pieceList.push_back(newPiece);
         this->board[tox][toy] = {newPiece->getPieceCode(move.piece->color), newPiece};
     }
@@ -325,7 +342,8 @@ void Board::undoMove(const Move &move)
 
         basicUndoMove(move);
     }
-    if (move.moveType == MoveType::promote)
+    if (move.moveType == MoveType::promoteQueen or move.moveType == MoveType::promoteBishop
+        or move.moveType == MoveType::promoteKnight or move.moveType == MoveType::promoteRook)
     {
         auto promotedPiece = this->board[move.to.poz.first][move.to.poz.second].second;
         auto newEnd = std::remove(pieceList.begin(), pieceList.end(), promotedPiece);

@@ -54,10 +54,6 @@ int BasicTest::test(Board& board, int depth, int maxDepth)
 		{
 			if (depth == 0) std::cout << char(move.from.poz.second + 'a') << 8 - move.from.poz.first <<
 				char(move.to.poz.second + 'a') << 8 - move.to.poz.first << ": " <<  1 << '\n';
-			// aici ceva nu e bine
-			if (move.moveType == MoveType::promote)
-				ans += 4, see +=4;
-			else
 				ans++, see ++;
 			board.undoMove(move);
 			continue;

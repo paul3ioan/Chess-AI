@@ -10,7 +10,10 @@ class Piece;
 enum class MoveType : uint8_t
 {
     castle,
-    promote,
+    promoteQueen,
+    promoteKnight,
+    promoteBishop,
+    promoteRook,
     basic,
     enpasant,
     doubleUp,

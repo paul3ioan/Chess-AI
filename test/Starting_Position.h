@@ -16,8 +16,8 @@ public:
     Board board;
     virtual void SetUp()
     {
-        std::string position  = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
+//        std::string position  = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        std::string position  = "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8 ";
         GeneralServices::restartPosition(board,position );
         board.makeAttackBoard();
         std::vector<Move> moves = board.getAllMoves(Color::white);
