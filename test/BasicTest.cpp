@@ -22,7 +22,7 @@ int BasicTest::test(Board& board, int depth, int maxDepth)
 	// moves pe black nu da mutari
 	//pionii in makeAttack ataca si campul din fata DONE
 	int contor = 0;
-	for (auto move : moves)
+	for (const auto& move : moves)
 	{
 		
 	//	std::cout << char(move.from.poz.second + 'a') << 8 - move.from.poz.first <<
@@ -59,7 +59,7 @@ int BasicTest::test(Board& board, int depth, int maxDepth)
 				ans += 4, see +=4;
 			else
 				ans++, see ++;
-			board.undoMove(&move);
+			board.undoMove(move);
 			continue;
 		}
 		/*if (move.moveType == MoveType::promote)
@@ -70,7 +70,7 @@ int BasicTest::test(Board& board, int depth, int maxDepth)
 		newBoard.whoMove = (newBoard.whoMove == Color::white ? Color::black : Color::white);
 		ans +=see = test(newBoard, depth + 1, maxDepth);
 			
-		board.undoMove(&move);
+		board.undoMove(move);
 		if (depth == 0) std::cout <<char(move.from.poz.second+'a') <<8 - move.from.poz.first<<
 			char(move.to.poz.second + 'a') << 8 -move.to.poz.first <<": " <<see << '\n';
 	}
