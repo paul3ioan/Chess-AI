@@ -83,10 +83,10 @@ std::vector<Move> Pawn::getLegalMoves(const Board &board) {
             Position from = lastMove.from;
             if (ans.first == 4 && lastMove.moveType == MoveType::doubleUp) {
                 if (from.poz.second == ans.second - 1)
-                    possibleMoves.emplace_back(Position(poz), Position(std::make_pair(poz.first - 1, poz.second - 1)),
+                    possibleMoves.emplace_back(Position(poz), Position(std::make_pair(poz.first + 1, poz.second - 1)),
                                                MoveType::enpasant, this_ptr);
                 if (from.poz.second == ans.second + 1)
-                    possibleMoves.emplace_back(Position(poz), Position(std::make_pair(poz.first - 1, poz.second + 1)),
+                    possibleMoves.emplace_back(Position(poz), Position(std::make_pair(poz.first + 1, poz.second + 1)),
                                                MoveType::enpasant, this_ptr);
 
             }
@@ -167,12 +167,12 @@ std::vector<Move> Pawn::getLegalMoves(const Board &board) {
 
                 if (from.poz.second == ans.second - 1)
 
-                    possibleMoves.emplace_back(Position(poz), Position(std::make_pair(poz.first + 1, poz.second - 1)),
+                    possibleMoves.emplace_back(Position(poz), Position(std::make_pair(poz.first - 1, poz.second - 1)),
                                                MoveType::enpasant, this_ptr);
 
                 if (from.poz.second == ans.second + 1)
 
-                    possibleMoves.emplace_back(Position(poz), Position(std::make_pair(poz.first + 1, poz.second + 1)),
+                    possibleMoves.emplace_back(Position(poz), Position(std::make_pair(poz.first - 1, poz.second + 1)),
                                                MoveType::enpasant, this_ptr);
 
 

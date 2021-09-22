@@ -1,13 +1,13 @@
 //
-// Created by paul on 27.08.2021.
+// Created by paul on 12.09.2021.
 //
 
-#ifndef CHESSAI_STARTING_POSITION_H
-#define CHESSAI_STARTING_POSITION_H
-
+#ifndef CHESSAI_POSITION2_H
+#define CHESSAI_POSITION2_H
 #include "gtest/gtest.h"
 #include "BasicTest.h"
-class Starting_Position :public ::testing::Test{
+
+class Position2 :public::testing::Test{
 public:
     std::set<std::string> wrongMoves;
     int maxDepth = 0;
@@ -16,8 +16,8 @@ public:
     Board board;
     virtual void SetUp()
     {
-        std::string position  = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-//        std::string position  = "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8 ";
+//        std::string position  = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/1R2K2R b KQkq - 0 1";
+        std::string position  = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/1R2K2R w Kkq - 0 1 ";
         GeneralServices::restartPosition(board,position );
         board.makeAttackBoard();
         std::vector<Move> moves = board.getAllMoves(Color::white);
@@ -34,4 +34,4 @@ public:
 };
 
 
-#endif //CHESSAI_STARTING_POSITION_H
+#endif //CHESSAI_POSITION2_H

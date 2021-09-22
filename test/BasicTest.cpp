@@ -56,17 +56,20 @@ int BasicTest::test(Board& board, int depth, int maxDepth)
 				char(move.to.poz.second + 'a') << 8 - move.to.poz.first << ": " <<  1 << '\n';
 				ans++, see ++;
 			board.undoMove(move);
+
 			continue;
 		}
 		/*if (move.moveType == MoveType::promote)
 		{
 			ans += promotingPiece(board, &move);
 		}*/
+        board.moveList.push_back(move);
 		Board newBoard = board;
 		newBoard.whoMove = (newBoard.whoMove == Color::white ? Color::black : Color::white);
 		ans +=see = test(newBoard, depth + 1, maxDepth);
 			
 		board.undoMove(move);
+        board.moveList.pop_back();
 		if (depth == 0) std::cout <<char(move.from.poz.second+'a') <<8 - move.from.poz.first<<
 			char(move.to.poz.second + 'a') << 8 -move.to.poz.first <<": " <<see << '\n';
 	}

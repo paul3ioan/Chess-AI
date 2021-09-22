@@ -10,11 +10,12 @@
 using namespace std;
 
 [[noreturn]] void loop();
-
+//const string position = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - ";
+const string position = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 std::shared_ptr<Piece> getPiece(Board &board, string arg);
 
 pair<string, string> decodeCommand(const string &command);
-
+void updateStatus(Board &board);
 Move getMove(Board &board, string);
 
 int main()
@@ -26,40 +27,53 @@ vector<Move> moves;
 [[noreturn]] void loop()
 {
 	Board board;
-	GeneralServices::loadPosition(board);
-
+//	GeneralServices::restartPosition(board,"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+//    GeneralServices::restartPosition(board,);
 	while (1)
 	{
 		int x = 5;
 		string input;
 		getline(cin, input);
 		auto [command, arguments] = decodeCommand(input);
+        if(command == "status")
+            ;
 		if (command == "loadPosition")
-			//GeneralServices::loadPosition(board, arguments)
-			;
+        {
+            GeneralServices::restartPosition(board, position);
+            cout << position << '\n';
+        }
+
 		else
 			if (command == "savePosition")
 				GeneralServices::savePosition(board);
 			else
 				if (command == "getMovesPiece")
 				{
-					//string s = "ceva";
-					//char c = s[101];
-					//throw "";
                     moves.clear();
 					auto piece = getPiece(board,arguments);
                     moves = piece->getLegalMoves(board);
-					vector<int> output;
-					for (const auto& move : moves)
-					{
-						int line = move.to.poz.first;
-						int col = move.to.poz.second;
-						output.push_back( (line * 8) + col);
-						
-					}
+					vector<pair<int,char>> output;
+
+                    for(const Move move : moves)
+                    {
+                        if(board.makeMove(move))
+                        {
+                             board.undoMove(move);
+                            int line = move.to.poz.first;
+                            int col = move.to.poz.second;
+                            if(move.moveType == MoveType::enpasant)
+                                output.push_back({(line * 8) + col, 'e'});
+                            else
+                                output.push_back({(line * 8) + col, '/'});
+                        }
+                    }
+
 					cout << output.size() << '\n';
-					for (int i : output)
-						cout << i << '\n';
+					for (auto i : output)
+                    {
+                        cout << i.first ;
+                        cout<< i.second << '\n';
+                    }
 					cout.flush();
 					// check for pin 
 					// make notation functie si pusa aici
@@ -69,7 +83,9 @@ vector<Move> moves;
 					{
 						auto move = getMove(board, arguments);
                         board.makeMove(move);
-
+                        board.moveList.push_back(move);
+                        updateStatus(board);
+                        //status pentru interfata functie separata
 						}
 					else if (command == "playerUndo")
 						auto move = getMove(board, arguments);
@@ -98,50 +114,73 @@ std::shared_ptr<Piece> getPiece(Board &board, string arg)
 
 Move getMove(Board &board, string arguments)
 {
+
     stringstream geek(arguments);
     int pos = 0;
     geek>>pos;
     int line = pos / 8;
     int col = pos % 8;
-	int fromCol = arguments[0]-'a', fromLine = arguments[1]-'1';
-	int toCol = arguments[2]-'a', toLine = arguments[3]-'1';
+
     for(auto move:moves)
     {
         if(move.to.poz.first == line and move.to.poz.second == col)
             return move;
     }
-//	Piece* piece = board.board[fromLine][fromCol].second;
-//	MoveType moveType;
-//	switch (arguments[5])
-//	{
-//	case'b':
-//		moveType = MoveType::basic;
-//		break;
-//
-//	case'c':
-//		moveType = MoveType::castle;
-//		break;
-//
-//	case'p':
-//		moveType = MoveType::promote;
-//		break;
-//
-//	case'e':
-//		moveType = MoveType::enpasant;
-//		break;
-//
-//	case'd':
-//		moveType = MoveType::doubleUp;
-//		break;
-//
-//	case'r':
-//		moveType = MoveType::rook;
-//		break;
-//	case'k':
-//		moveType = MoveType::king;
-//		break;
-//	default:
-//		break;
-//	}
-//	return Move(Position({ fromLine, fromCol }), Position({ toLine, toCol }), moveType, piece);
+
+}
+void updateStatus(Board& board) {
+
+    bool canMove = false;
+    //change the player who move
+    if (board.whoMove == Color::black)
+        board.whoMove = Color::white;
+    else
+        board.whoMove = Color::black;
+    Board board2 = board;
+    //test possible moves
+    for (auto piece: board2.pieceList) {
+        if (piece->color == board2.whoMove) {
+            auto moves = piece->getLegalMoves(board2);
+            for (auto move: moves) {
+                if (board2.makeMove(move)) {
+                    board2.undoMove(move);
+                    canMove = true;
+                    break;
+                }
+            }
+            if (canMove)
+                break;
+        }
+    }
+    board2.whoMove == Color::white ? cout << 'w' : cout << 'b';
+    if (canMove)
+    {
+        cout <<"0\n";
+        return;
+    }
+
+    shared_ptr<Piece> king;
+    for (auto piece: board2.pieceList) {
+        if (piece->color == board2.whoMove) {
+            if (piece->getPieceCode(piece->color) == (
+                    piece->color == Color::white ? PieceCode::whiteKing : PieceCode::blackKing)) {
+                king = piece;
+                break;
+            }
+        }
+    }
+    if(board2.whoMove==Color::black and board2.attackedBlack[king->poz.poz.first][king->poz.poz.second])
+    {
+
+        cout <<"m\n";
+        return;
+    }
+    if(board2.whoMove==Color::white and board2.attackedWhite[king->poz.poz.first][king->poz.poz.second])
+    {
+
+        cout <<"m\n";
+        return;
+    }
+
+    cout <<"d\n";
 }

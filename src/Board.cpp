@@ -43,7 +43,10 @@ Board::Board(const Board &board)
             if (this->board[i][j].second != nullptr)
                 this->pieceList.push_back(this->board[i][j].second);
         }
-
+    for(auto move: board.moveList)
+    {
+        this->moveList.push_back(move);
+    }
 }
 
 Board::~Board()
@@ -179,15 +182,15 @@ void Board::doMove(const Move &move)
     }
     if (move.moveType == MoveType::rook)
     {
-        int whichLine = move.piece->color == Color::white ? 7 : 0;
-        if (fromx == fromy && fromy == whichLine)
-        {
-            if (whichLine == 0)
-            {
-                fromy == 0 ? this->whiteCastleLeft = false : this->whiteCastleRight = false;
-            } else
-                fromy == 0 ? this->blackCastleLeft = false : this->blackCastleRight = false;
-        }
+//        int whichLine = move.piece->color == Color::white ? 7 : 0;
+        if(fromy == 0 and fromx == 0)
+            this->blackCastleLeft = false;
+        if(fromy == 0 and fromx == 7)
+            this->whiteCastleLeft = false;
+        if(fromy == 7 and fromx == 0)
+            this->blackCastleRight = false;
+        if(fromy == 7 and fromx == 7)
+            this->whiteCastleRight = false;
         basicMove(move);
     }
     if (move.moveType == MoveType::promoteQueen or move.moveType == MoveType::promoteBishop
@@ -238,6 +241,7 @@ void Board::basicMove(const Move &move)
     // basic move implementation
     if (this->board[tox][toy].first == PieceCode::empty)
     {
+        this->capturedPieces.push(nullptr);
         this->board[tox][toy] = {piece->getPieceCode(move.piece->color), piece};
         this->board[fromx][fromy] = {PieceCode::empty, nullptr};
         move.piece->poz = move.to;
@@ -322,6 +326,7 @@ void Board::undoMove(const Move &move)
         this->board[move.from.poz.first][move.from.poz.second] = {move.piece->getPieceCode(move.piece->color),
                                                                   move.piece};
         this->board[move.to.poz.first][move.to.poz.second] = {PieceCode::empty, nullptr};
+        move.piece->poz = move.from;
         if (move.to.poz.second == 6)
         {
             auto movedRook = this->board[move.from.poz.first][5].second;
@@ -367,10 +372,10 @@ void Board::basicUndoMove(const Move &move)
 
     this->board[fromx][fromy] = {move.piece->getPieceCode(move.piece->color), move.piece};
     this->board[tox][toy] = {PieceCode::empty, nullptr};
-    if (!this->capturedPieces.empty())
-    {
         auto rip = this->capturedPieces.top();
         this->capturedPieces.pop();
+    if (rip!=nullptr)
+    {
         int capturedX = rip->poz.poz.first;
         int capturedY = rip->poz.poz.second;
         auto newPiece = rip;
