@@ -196,12 +196,20 @@ void Board::doMove(const Move &move)
     if (move.moveType == MoveType::promoteQueen or move.moveType == MoveType::promoteBishop
         or move.moveType == MoveType::promoteKnight or move.moveType == MoveType::promoteRook)
     {
+        if(this->board[tox][toy].first !=PieceCode::empty)
+        {
+            this->capturedPieces.push(this->board[tox][toy].second);
+            auto newEnd = std::remove(this->pieceList.begin(), this->pieceList.end(), this->capturedPieces.top());
+            this->pieceList.erase(newEnd, this->pieceList.end());
+            this->board[tox][toy] = {PieceCode::empty, nullptr};
+        }
         this->capturedPieces.push(this->board[fromx][fromy].second);
         auto newEnd = std::remove(this->pieceList.begin(), this->pieceList.end(), this->capturedPieces.top());
         this->pieceList.erase(newEnd, this->pieceList.end());
         this->board[fromx][fromy] = {PieceCode::empty, nullptr};
-        //for now the new piece is a queen
-        std::shared_ptr<Piece> newPiece;
+        //now test if i captured a piece
+
+         std::shared_ptr<Piece> newPiece;
         switch(move.moveType)
         {
             case MoveType::promoteKnight:
@@ -217,7 +225,7 @@ void Board::doMove(const Move &move)
                 newPiece = std::make_shared<Bishop>(this->capturedPieces.top()->color, move.to);
                 break;
         }
-
+        newPiece->this_ptr = newPiece;
         this->pieceList.push_back(newPiece);
         this->board[tox][toy] = {newPiece->getPieceCode(move.piece->color), newPiece};
     }
@@ -351,14 +359,23 @@ void Board::undoMove(const Move &move)
         or move.moveType == MoveType::promoteKnight or move.moveType == MoveType::promoteRook)
     {
         auto promotedPiece = this->board[move.to.poz.first][move.to.poz.second].second;
+        promotedPiece->this_ptr = nullptr;
+        this->board[move.to.poz.first][move.to.poz.second]={PieceCode::empty, nullptr};
         auto newEnd = std::remove(pieceList.begin(), pieceList.end(), promotedPiece);
         this->pieceList.erase(newEnd, this->pieceList.end());
         //delete promotedPiece;
-        auto newPiece = this->capturedPieces.top();
+
+        auto oldPawn = this->capturedPieces.top();
         this->capturedPieces.pop();
+        this->board[move.from.poz.first][move.from.poz.second] = {oldPawn->getPieceCode(oldPawn->color),oldPawn};
+        this->pieceList.push_back(oldPawn);
+        if(!this->capturedPieces.empty()){
+            auto oldPiece = this->capturedPieces.top();
+            this->capturedPieces.pop();
 //		this->capturedPiece = nullptr;
-        this->board[move.from.poz.first][move.from.poz.second] = {newPiece->getPieceCode(newPiece->color), newPiece};
-        this->pieceList.push_back(newPiece);
+            this->board[move.to.poz.first][move.to.poz.second] = {oldPiece->getPieceCode(oldPiece->color), oldPiece};
+            this->pieceList.push_back(oldPiece);
+        }
     }
 
 }

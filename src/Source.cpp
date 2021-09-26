@@ -11,7 +11,8 @@ using namespace std;
 
 [[noreturn]] void loop();
 //const string position = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - ";
-const string position = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+//const string position = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const string position = "rnbqkbnr/1ppppppp/8/8/8/8/pPPPPPPP/1NBQKBNR b KQkq - 0 1";
 std::shared_ptr<Piece> getPiece(Board &board, string arg);
 
 pair<string, string> decodeCommand(const string &command);
@@ -53,17 +54,25 @@ vector<Move> moves;
 					auto piece = getPiece(board,arguments);
                     moves = piece->getLegalMoves(board);
 					vector<pair<int,char>> output;
-
+                    unordered_map<int,bool> promotingPiece;
                     for(const Move move : moves)
                     {
-                        if(board.makeMove(move))
-                        {
-                             board.undoMove(move);
+                        if(board.makeMove(move)) {
+                            board.undoMove(move);
                             int line = move.to.poz.first;
                             int col = move.to.poz.second;
-                            if(move.moveType == MoveType::enpasant)
+                            if (move.moveType == MoveType::enpasant)
                                 output.push_back({(line * 8) + col, 'e'});
-                            else
+                            else if ((move.moveType == MoveType::promoteBishop or move.moveType == MoveType::promoteQueen
+                                     or move.moveType == MoveType::promoteKnight or
+                                     move.moveType == MoveType::promoteRook) ) {
+                                if(promotingPiece[line*8 + col])
+                                    continue;
+                                output.push_back({(line * 8) + col, 'p'});
+                                promotingPiece[line*8 + col] = true;
+
+                            }
+                                    else
                                 output.push_back({(line * 8) + col, '/'});
                         }
                     }
@@ -115,16 +124,43 @@ std::shared_ptr<Piece> getPiece(Board &board, string arg)
 Move getMove(Board &board, string arguments)
 {
 
-    stringstream geek(arguments);
+ /*   stringstream geek(arguments);
     int pos = 0;
     geek>>pos;
     int line = pos / 8;
     int col = pos % 8;
+*/
+    char promotedPiece = NULL;
+    int pos = 0;
+    for(char c : arguments)
+    {
+        if(c >= '0' and c <= '9')
+            pos = pos * 10 + (c - '0');
+        else if(c != '/')
+        {
+            promotedPiece = c;
+        }
 
+    }
+    int line = pos / 8;
+    int col = pos % 8;
     for(auto move:moves)
     {
-        if(move.to.poz.first == line and move.to.poz.second == col)
+        if(move.to.poz.first == line and move.to.poz.second == col )
+        {
+            if(promotedPiece == NULL)
             return move;
+            else{
+                if(move.moveType==MoveType::promoteKnight and promotedPiece == 'n')
+                    return move;
+                if(move.moveType==MoveType::promoteBishop and promotedPiece == 'b')
+                    return move;
+                if(move.moveType==MoveType::promoteRook and promotedPiece == 'r')
+                    return move;
+                if(move.moveType==MoveType::promoteQueen and promotedPiece == 'q')
+                    return move;
+            }
+        }
     }
 
 }
