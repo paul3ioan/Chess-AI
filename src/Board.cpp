@@ -369,7 +369,7 @@ void Board::undoMove(const Move &move)
         this->capturedPieces.pop();
         this->board[move.from.poz.first][move.from.poz.second] = {oldPawn->getPieceCode(oldPawn->color),oldPawn};
         this->pieceList.push_back(oldPawn);
-        if(!this->capturedPieces.empty()){
+        if(!this->capturedPieces.empty() and this->capturedPieces.top() !=nullptr){
             auto oldPiece = this->capturedPieces.top();
             this->capturedPieces.pop();
 //		this->capturedPiece = nullptr;
