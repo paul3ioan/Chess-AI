@@ -12,7 +12,7 @@ using namespace std;
 [[noreturn]] void loop();
 //const string position = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - ";
 //const string position = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-const string position = "rnbqkbnr/1ppppppp/8/8/8/8/pPPPPPPP/1NBQKBNR b KQkq - 0 1";
+const string position = "rnbqkbnr/1ppppppp/8/8/8/p7/1PPPPPPP/1NBQKBNR b KQ kq - 0 1";
 std::shared_ptr<Piece> getPiece(Board &board, string arg);
 
 pair<string, string> decodeCommand(const string &command);
@@ -51,6 +51,7 @@ vector<Move> moves;
 				if (command == "getMovesPiece")
 				{
                     moves.clear();
+
 					auto piece = getPiece(board,arguments);
                     moves = piece->getLegalMoves(board);
 					vector<pair<int,char>> output;
